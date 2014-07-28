@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0FC50412-EF6E-4E3E-AE41-A7CE44015E36}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>ProduktivLineSimul.Module1</StartupObject>
+    <StartupObject>ProduktivLineSimul.MainModule</StartupObject>
     <RootNamespace>ProduktivLineSimul</RootNamespace>
     <AssemblyName>ProduktivLineSimul</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -62,7 +62,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Module1.vb" />
+    <Compile Include="MainModule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

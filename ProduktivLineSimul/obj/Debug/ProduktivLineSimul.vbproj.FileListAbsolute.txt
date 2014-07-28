@@ -16,3 +16,6 @@ C:\Users\EIT\Desktop\ProduktivLineSimul\ProduktivLineSimul\ProduktivLineSimul\bi
 C:\Users\EIT\Desktop\ProduktivLineSimul\ProduktivLineSimul\ProduktivLineSimul\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\EIT\Desktop\ProduktivLineSimul\ProduktivLineSimul\ProduktivLineSimul\obj\Debug\ProduktivLineSimul.Resources.resources
 C:\Users\EIT\Desktop\ProduktivLineSimul\ProduktivLineSimul\ProduktivLineSimul\obj\Debug\ProduktivLineSimul.vbproj.GenerateResource.Cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Debug\ProduktivLineSimul.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Debug\ProduktivLineSimul.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Debug\ProduktivLineSimul.pdb

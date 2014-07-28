@@ -1,4 +1,4 @@
-﻿Module Module1
+﻿Module MainModule
 
     Public Const TIMEBASE As Decimal = 1
     Public Const NUMDECIMAL As Integer = 2
@@ -100,8 +100,8 @@
 
     Public Sub Execute_project()
 
-        'Project_DanoneWaters()
-        Project_Castrol()
+        'Project_Waters5L()
+        Project_Oil1L()
         'Project_PerfectLine()
         'Project_TestReturn()
 
@@ -149,7 +149,7 @@
 
     End Sub
 
-    Public Sub Project_DanoneWaters()
+    Public Sub Project_Waters5L()
 
 
         Dim modSbo As New clsModular("Combi", 5000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.95, 179)
@@ -256,7 +256,7 @@
 
     End Sub
 
-    Public Sub Project_Castrol()
+    Public Sub Project_Oil1L()
 
         Dim prodPerSec As Decimal = 20400 / 3600
 
@@ -283,7 +283,7 @@
 
         Dim modTrp4 As New clsModular(clsModular.enumModularType.Transport)
         modTrp4.SetAccumulator(35 * prodPerSec, 15, prodPerSec)
-        
+
         Dim modWrapper As New clsModular("Wrapper", 23400, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.943, 31)
         modWrapper.unitCycle = 24
 
@@ -575,6 +575,8 @@
 
         Friend Initialized As Boolean = False
 
+        Friend InOutputs_Combining As Boolean = True 'Or Assembling inputs/outputs
+
         Friend Enum enumStates As Integer
             Stopped
             Running
@@ -713,74 +715,158 @@
                 randomizedInputs.Add(Rnd, one_inputlink)
             Next
 
-            For Each one_inputlink As clsLink In randomizedInputs.Values
+            If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
 
-                one_inputlink.state = clsLink.enumStates.Normal
-                Dim currentpotential As Decimal = Decimal.MaxValue
+                For Each one_inputlink As clsLink In randomizedInputs.Values
 
-                'Restriction by Upstream equipment content size
-                currentpotential = Math.Min(currentpotential, one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential)
-                'Restriction by Own speed
-                If speed < MAX_SPEED Then currentpotential = Math.Min(currentpotential, Me.speed / Inputs.Count)
-                'Restriction by Upstream equipment speed
-                currentpotential = Math.Min(currentpotential, one_inputlink.upstream.speed / one_inputlink.upstream.Outputs.Count)
+                    one_inputlink.state = clsLink.enumStates.Normal
+                    Dim currentpotential As Decimal = Decimal.MaxValue
 
-                'Restriction by Downstream equipment
-                Dim capacity As Decimal = 0
-                'If contentMax is big enough to be considered as accumulation
-                If Me.Content_max > IIf(Me.speed < MAX_SPEED, Me.speed, 0) Then
-                    'Restriction by Accumulation potential
-                    'With one_inputlink.upstream
-                    '    capacity = Math.Max(Me.Content_Max, Math.Min(Me.speed / Inputs.Count, .speed / .Outputs.Count)) + alreadyPlannedPotential
-                    'End With
-                    'currentpotential = Math.Min(currentpotential, capacity - Me.Content - Me.Content_entering)
-                    currentpotential = Math.Min(currentpotential, InputPotential)
+                    'Restriction by Upstream equipment content size
+                    currentpotential = Math.Min(currentpotential, one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential)
+                    'Restriction by Own speed
+                    If speed < MAX_SPEED Then currentpotential = Math.Min(currentpotential, Me.speed / Inputs.Count)
+                    'Restriction by Upstream equipment speed
+                    currentpotential = Math.Min(currentpotential, one_inputlink.upstream.speed / IIf(one_inputlink.upstream.InOutputs_Combining, one_inputlink.upstream.Outputs.Count, 1))
 
-                ElseIf Not Me.modType = enumModularType.Output Then
+                    'Restriction by Downstream equipment
+                    Dim capacity As Decimal = 0
+                    'If contentMax is big enough to be considered as accumulation
+                    If Me.Content_Max > IIf(Me.speed < MAX_SPEED, Me.speed, 0) Then
+                        'Restriction by Accumulation potential
+                        'With one_inputlink.upstream
+                        '    capacity = Math.Max(Me.Content_Max, Math.Min(Me.speed / Inputs.Count, .speed / .Outputs.Count)) + alreadyPlannedPotential
+                        'End With
+                        'currentpotential = Math.Min(currentpotential, capacity - Me.Content - Me.Content_entering)
+                        currentpotential = Math.Min(currentpotential, InputPotential)
 
-                    If speed < MAX_SPEED Then
-                        capacity = IIf(unitCycle = 0, Me.speed / Inputs.Count, unitCycle + Me.speed / Inputs.Count)
-                        capacity += alreadyPlannedPotential
-                    Else
-                        With one_inputlink.upstream
-                            If .speed < MAX_SPEED Then
-                                capacity = IIf(.unitCycle = 0, .speed / .Outputs.Count, .unitCycle + .speed / .Outputs.Count)
-                            Else
-                                capacity = .OutputPotential
-                            End If
+                    ElseIf Not Me.modType = enumModularType.Output Then
+
+                        If speed < MAX_SPEED Then
+                            capacity = IIf(unitCycle = 0, Me.speed / Inputs.Count, unitCycle + Me.speed / Inputs.Count)
                             capacity += alreadyPlannedPotential
-                            capacity = capacity / .Outputs.Count
-                        End With
+                        Else
+                            With one_inputlink.upstream
+                                If .speed < MAX_SPEED Then
+                                    'capacity = IIf(.unitCycle = 0, .speed / IIf(.InOutputs_Combining, .Outputs.Count, 1), .unitCycle + .speed / IIf(.InOutputs_Combining, .Outputs.Count, 1))
+                                    capacity = IIf(.unitCycle = 0, .speed, .unitCycle + .speed)
+                                Else
+                                    capacity = .OutputPotential
+                                End If
+                                capacity += alreadyPlannedPotential
+                                capacity = capacity / IIf(.InOutputs_Combining, .Outputs.Count, 1)
+                            End With
+                        End If
+                        'Restriction by continuous flow rupture
+                        currentpotential = Math.Min(currentpotential, capacity - Me.OutputPotential)
+
                     End If
-                    'Restriction by continuous flow rupture
-                    currentpotential = Math.Min(currentpotential, capacity - Me.OutputPotential)
 
-                End If
-
-                'Define the current state if Build back or Starvation
-                If one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential < EPSILON Then
-                    one_inputlink.state = clsLink.enumStates.Empty
-                ElseIf currentpotential < EPSILON Then
-                    currentpotential = 0
-                    one_inputlink.state = clsLink.enumStates.Full
-                End If
-
-                If MTBF < MAX_TMBF And Not MTTR = 0 Then
-                    If MTTR_next < 1 And MTBF_next < 1 Then
-                        'Renew MTBF and MTTR
-                        MTTR_next = NormalMTTR(MTTR)
-                        MTBF_next = NormalMTBF(MTBF)
-                        statsMTBF.Add(MTBF_next)
-                        statsMTTR.Add(MTTR_next)
-                    ElseIf MTTR_next > 1 And MTBF_next < 1 Then
+                    'Define the current state if Build back or Starvation
+                    If one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential < EPSILON Then
+                        one_inputlink.state = clsLink.enumStates.Empty
+                    ElseIf currentpotential < EPSILON Then
                         currentpotential = 0
+                        one_inputlink.state = clsLink.enumStates.Full
                     End If
-                End If
 
-                one_inputlink.potential = currentpotential
-                one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+                    If MTBF < MAX_TMBF And Not MTTR = 0 Then
+                        If MTTR_next < 1 And MTBF_next < 1 Then
+                            'Renew MTBF and MTTR
+                            MTTR_next = NormalMTTR(MTTR)
+                            MTBF_next = NormalMTBF(MTBF)
+                            statsMTBF.Add(MTBF_next)
+                            statsMTTR.Add(MTTR_next)
+                        ElseIf MTTR_next > 1 And MTBF_next < 1 Then
+                            currentpotential = 0
+                        End If
+                    End If
 
-            Next
+                    one_inputlink.potential = currentpotential
+                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+
+                Next
+
+            Else 'Outputs are assembled/separated, I tot. = min(O1, O2, ...) 
+                'To study and complete
+                TBD()
+
+                Dim totalcurrentpotential As Decimal = Decimal.MaxValue
+
+                For Each one_inputlink As clsLink In randomizedInputs.Values
+                    Dim currentpotential As Decimal = Decimal.MaxValue
+                    one_inputlink.state = clsLink.enumStates.Normal
+
+                    'Restriction by Upstream equipment content size
+                    currentpotential = Math.Min(currentpotential, one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential)
+                    'Restriction by Own speed
+                    If speed < MAX_SPEED Then currentpotential = Math.Min(currentpotential, Me.speed)
+                    'Restriction by Upstream equipment speed
+                    currentpotential = Math.Min(currentpotential, one_inputlink.upstream.speed / IIf(one_inputlink.upstream.InOutputs_Combining, one_inputlink.upstream.Outputs.Count, 1))
+
+                    'Restriction by Downstream equipment
+                    Dim capacity As Decimal = 0
+                    'If contentMax is big enough to be considered as accumulation
+                    If Me.Content_Max > IIf(Me.speed < MAX_SPEED, Me.speed, 0) Then
+                        'Restriction by Accumulation potential
+                        currentpotential = Math.Min(currentpotential, InputPotential)
+
+                    ElseIf Not Me.modType = enumModularType.Output Then
+
+                        If speed < MAX_SPEED Then
+                            capacity = IIf(unitCycle = 0, Me.speed, unitCycle + Me.speed)
+                            capacity += alreadyPlannedPotential
+                        Else
+                            With one_inputlink.upstream
+                                If .speed < MAX_SPEED Then
+                                    'capacity = IIf(.unitCycle = 0, .speed / IIf(.InOutputs_Combining, .Outputs.Count, 1), .unitCycle + .speed / IIf(.InOutputs_Combining, .Outputs.Count, 1))
+                                    capacity = IIf(.unitCycle = 0, .speed, .unitCycle + .speed)
+                                Else
+                                    capacity = .OutputPotential
+                                End If
+                                capacity += alreadyPlannedPotential
+                                capacity = capacity / .Outputs.Count
+                            End With
+                        End If
+                        'Restriction by continuous flow rupture
+                        currentpotential = Math.Min(currentpotential, capacity - Me.OutputPotential)
+
+                    End If
+
+                    'Define the current state if Build back or Starvation
+                    If one_inputlink.upstream.OutputPotential - one_inputlink.upstream.alreadyPlannedPotential < EPSILON Then
+                        one_inputlink.state = clsLink.enumStates.Empty
+                    ElseIf currentpotential < EPSILON Then
+                        currentpotential = 0
+                        one_inputlink.state = clsLink.enumStates.Full
+                    End If
+
+                    If MTBF < MAX_TMBF And Not MTTR = 0 Then
+                        If MTTR_next < 1 And MTBF_next < 1 Then
+                            'Renew MTBF and MTTR
+                            MTTR_next = NormalMTTR(MTTR)
+                            MTBF_next = NormalMTBF(MTBF)
+                            statsMTBF.Add(MTBF_next)
+                            statsMTTR.Add(MTTR_next)
+                        ElseIf MTTR_next > 1 And MTBF_next < 1 Then
+                            currentpotential = 0
+                        End If
+                    End If
+
+                    one_inputlink.potential = currentpotential
+                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+
+                    totalcurrentpotential = Math.Min(currentpotential, totalcurrentpotential)
+                Next
+
+                For Each one_inputlink As clsLink In randomizedInputs.Values
+                    one_inputlink.potential = totalcurrentpotential
+                Next
+
+
+            End If
+
+
 
         End Sub
 
