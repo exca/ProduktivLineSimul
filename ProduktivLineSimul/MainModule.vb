@@ -101,9 +101,9 @@
     Public Sub Execute_project()
 
         'Project_Waters5L()
-        Project_Oil1L()
+        'Project_Oil1L()
         'Project_PerfectLine()
-        'Project_TestReturn()
+        Project_TestReturn()
 
         'modInput.Content = 30000
 
@@ -121,17 +121,20 @@
                 onelink.resetPotential()
             Next
             For Each onemodule As clsModular In allModules
-                onemodule.checkPotential()
+                onemodule.checkPotential_pass1()
+            Next
+            For Each onemodule As clsModular In allModules
+                onemodule.checkPotential_pass2()
             Next
             For Each onemodule As clsModular In allModules
                 onemodule.run()
             Next
 
-            'Console.Clear()
-            'For Each onemodule As clsModular In displayedModules
-            '    onemodule.details(True)
-            'Next
-            'System.Threading.Thread.Sleep(1000)
+            Console.Clear()
+            For Each onemodule As clsModular In displayedModules
+                onemodule.details(True)
+            Next
+            System.Threading.Thread.Sleep(1000)
 
             Math.DivRem(i, 3600, i_rem)
             If i_rem = 0 Then
@@ -326,16 +329,19 @@
         modInput.speed = 100
 
         Dim modGrp As New clsModular("Grouper", 300, clsModular.enumSpeedUnit.per_Sec)
+        modGrp.InOutputs_Combining = False
 
         Dim modTrp As New clsModular(clsModular.enumModularType.Transport)
         modTrp.SetAccumulator(2000, 10, 200)
 
         Dim modDiv As New clsModular("Divider", 300, clsModular.enumSpeedUnit.per_Sec)
+        modDiv.InOutputs_Combining = False
 
         Dim modMach As New clsModular("Critical Machine", 150, clsModular.enumSpeedUnit.per_Sec, clsModular.enumParameters.Eff_MTBF, 0.9, 30)
 
         Dim modRetTrp As New clsModular(clsModular.enumModularType.Transport)
         modRetTrp.SetAccumulator(2000, 10, 200)
+        modRetTrp.Content_entering = 4000
 
         Dim modRetMach As New clsModular("Return Machine", 150, clsModular.enumSpeedUnit.per_Sec, clsModular.enumParameters.Eff_MTBF, 0.8, 30)
 
@@ -434,21 +440,24 @@
 
         End Class
 
+        Dim linkedModular As clsModular
 
         Dim FirstCell As clsCell 'Firsts products to enter
         Dim LastCell As clsCell 'Firsts products to exit
+        Dim LastCellPoped As Boolean = False
 
         Dim MaxContent As Decimal
         Dim MaxCells As Decimal
         Dim Content_by_cell As Decimal
 
         ''' <summary>
-        ''' Create an accu with the sspecified parameters
+        ''' Create an accu with the specified parameters
         ''' </summary>
         ''' <param name="_max_content">Total number of product (capacity)</param>
         ''' <param name="_transit_time">Total time (in time units) between input and output</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal _max_content As Decimal, ByVal _transit_time As Integer)
+        Public Sub New(ByVal _max_content As Decimal, ByVal _transit_time As Integer, ByRef _modular As clsModular)
+            linkedModular = _modular
             MaxContent = _max_content
             MaxCells = _transit_time
             Content_by_cell = MaxContent / MaxCells
@@ -484,6 +493,9 @@
         'Prepare the next cycle to be executed
         Public Sub init()
 
+            'Reset last cell poped indicator
+            LastCellPoped = False
+
             'Add a new cell at the biggining
             Dim newCell As New clsCell
             FirstCell.previousCell = newCell
@@ -518,8 +530,18 @@
 
         'Return the total quantity that is available and remove it from last cell content
         Public Function Pop(ByVal _quantity As Decimal) As Decimal
-            Pop = Math.Min(LastCell.content, _quantity)
-            LastCell.content -= Pop
+
+            If linkedModular.InOutputs_Combining Then
+                'On combining equipment
+                Pop = Math.Min(LastCell.content, _quantity)
+                LastCell.content -= Pop
+            Else
+                'On assembling equipment
+                Pop = _quantity 'We don't check the last cell content and assume that the potential is right
+                If Not LastCellPoped Then LastCell.content -= Pop
+                LastCellPoped = True
+            End If
+
         End Function
 
         'Put content into the firs cell
@@ -565,7 +587,7 @@
         Friend Inputs As New List(Of clsLink)
         Friend Outputs As New List(Of clsLink)
 
-        Private Content_Accu As New clsAccu(0, 1)
+        Private Content_Accu As New clsAccu(0, 1, Me)
 
         Friend statsState As New Dictionary(Of enumStates, Decimal)
         Friend statsCounts As New Dictionary(Of enumType, Decimal)
@@ -575,6 +597,10 @@
 
         Friend Initialized As Boolean = False
 
+        ''' <summary>
+        ''' Combining 1+1=2 or Assembling 1+1=1
+        ''' </summary>
+        ''' <remarks></remarks>
         Friend InOutputs_Combining As Boolean = True 'Or Assembling inputs/outputs
 
         Friend Enum enumStates As Integer
@@ -704,7 +730,22 @@
 
         End Sub
 
-        Public Sub checkPotential()
+        ''' <summary>
+        ''' Check the potential of each link by evaluating from outfeed and going upstream
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub checkPotential_pass1()
+
+            'Manage time before breackdown and breackdown duration
+            If MTBF < MAX_TMBF And Not MTTR = 0 Then
+                If MTTR_next < 1 And MTBF_next < 1 Then
+                    'Renew MTBF and MTTR
+                    MTTR_next = NormalMTTR(MTTR)
+                    MTBF_next = NormalMTBF(MTBF)
+                    statsMTBF.Add(MTBF_next)
+                    statsMTTR.Add(MTTR_next)
+                End If
+            End If
 
             Dim randomizedInputs As New SortedList(Of Single, clsLink)
             For Each one_inputlink As clsLink In Inputs
@@ -770,26 +811,24 @@
                         one_inputlink.state = clsLink.enumStates.Full
                     End If
 
-                    If MTBF < MAX_TMBF And Not MTTR = 0 Then
-                        If MTTR_next < 1 And MTBF_next < 1 Then
-                            'Renew MTBF and MTTR
-                            MTTR_next = NormalMTTR(MTTR)
-                            MTBF_next = NormalMTBF(MTBF)
-                            statsMTBF.Add(MTBF_next)
-                            statsMTTR.Add(MTTR_next)
-                        ElseIf MTTR_next > 1 And MTBF_next < 1 Then
-                            currentpotential = 0
-                        End If
+                    'Define the breakdown state
+                    If MTTR_next > 1 And MTBF_next < 1 Then
+                        currentpotential = 0
+                        one_inputlink.state = clsLink.enumStates.Full
                     End If
 
+                    'We consider the link current potential calculated
                     one_inputlink.potential = currentpotential
-                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+
+                    'We make reservation of the products only if the machine is not assembling them
+                    '(for assembling machine, every output will receive the same amount of products)
+                    If one_inputlink.upstream.InOutputs_Combining Then
+                        one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+                    End If
 
                 Next
 
             Else 'Outputs are assembled/separated, I tot. = min(O1, O2, ...) 
-                'To study and complete
-                TBD()
 
                 Dim totalcurrentpotential As Decimal = Decimal.MaxValue
 
@@ -841,37 +880,72 @@
                         one_inputlink.state = clsLink.enumStates.Full
                     End If
 
-                    If MTBF < MAX_TMBF And Not MTTR = 0 Then
-                        If MTTR_next < 1 And MTBF_next < 1 Then
-                            'Renew MTBF and MTTR
-                            MTTR_next = NormalMTTR(MTTR)
-                            MTBF_next = NormalMTBF(MTBF)
-                            statsMTBF.Add(MTBF_next)
-                            statsMTTR.Add(MTTR_next)
-                        ElseIf MTTR_next > 1 And MTBF_next < 1 Then
-                            currentpotential = 0
-                        End If
+                    'Define the breakdown state
+                    If MTTR_next > 1 And MTBF_next < 1 Then
+                        currentpotential = 0
+                        one_inputlink.state = clsLink.enumStates.Full
                     End If
 
+                    'We consider the link current potential calculated
                     one_inputlink.potential = currentpotential
-                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
 
+                    'We make reservation of the products only if the machine is not assembling them
+                    '(for assembling machine, every output will receive the same amount of products)
+                    If one_inputlink.upstream.InOutputs_Combining Then
+                        one_inputlink.upstream.alreadyPlannedPotential += currentpotential
+                    End If
+
+                    'Define effective potential according to previously processed links
                     totalcurrentpotential = Math.Min(currentpotential, totalcurrentpotential)
                 Next
 
+                'Report the effetive potential on every link
                 For Each one_inputlink As clsLink In randomizedInputs.Values
                     one_inputlink.potential = totalcurrentpotential
+                    'Change the link state to report that the output equipment is not ready
+                    If totalcurrentpotential = 0 And one_inputlink.state = clsLink.enumStates.Normal Then
+                        one_inputlink.state = clsLink.enumStates.Full
+                    End If
                 Next
-
 
             End If
 
+        End Sub
 
+        ''' <summary>
+        ''' Check the potential on assembling machines, balancing outputs, and effective presence of products
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub checkPotential_pass2()
+
+            'TODO: Check effective presence of products
+
+            If Me.InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
+
+                'NOP
+
+            Else 'Outputs are assembled/separated, I tot. = min(O1, O2, ...)
+
+                Dim balancedPotential As Decimal = Decimal.MaxValue
+
+                'Check the potential on eahc output
+                For Each one_outputlink As clsLink In Outputs
+                    balancedPotential = Math.Min(balancedPotential, one_outputlink.potential)
+                Next
+
+                'Apply on every link
+                For Each one_outputlink As clsLink In Outputs
+                    one_outputlink.potential = balancedPotential
+                Next
+
+            End If
 
         End Sub
 
+
         Public Sub run()
 
+            'If there is no breakdown, the equipment is processing
             If MTBF_next > 0 Then
 
                 If Not statsCounts.ContainsKey(enumType.Processed) Then statsCounts.Add(enumType.Processed, 0)
@@ -881,55 +955,142 @@
                 Dim injectedProducts As Decimal = 0
 
                 Dim upstreamwait As Boolean = True
-                For Each one_inputlink As clsLink In Inputs
-                    If Not one_inputlink.state = clsLink.enumStates.Empty Then
-                        If unitCycle > 0 Then
-                            acumulatedPotential += one_inputlink.upstream.Content_Accu.Pop(one_inputlink.potential)
-                            enteringProducts = Decimal.Truncate(EPSILON + acumulatedPotential / unitCycle) * unitCycle
-                            acumulatedPotential -= enteringProducts
+
+                If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
+
+                    For Each one_inputlink As clsLink In Inputs
+
+                        'if the link is declared empty, we don't process it
+                        If Not one_inputlink.state = clsLink.enumStates.Empty Then
+
+                            'Calculate the number of entering products for the link
+                            If unitCycle > 0 Then 'Cyclical behaviour
+                                acumulatedPotential += one_inputlink.upstream.Content_Accu.Pop(one_inputlink.potential)
+                                enteringProducts = Decimal.Truncate(EPSILON + acumulatedPotential / unitCycle) * unitCycle
+                                acumulatedPotential -= enteringProducts
+                            Else 'Continuous behaviour
+                                enteringProducts = one_inputlink.upstream.Content_Accu.Pop(one_inputlink.potential)
+                            End If
+
+                            'Calculate the rejected products at upstream equipment
+                            If one_inputlink.upstream.rejectrate > 0 Then
+                                If Not one_inputlink.upstream.statsCounts.ContainsKey(enumType.Reject) Then
+                                    one_inputlink.upstream.statsCounts.Add(enumType.Reject, 0)
+                                End If
+                                If unitCycle > 0 Then 'Cyclical behaviour
+                                    rejectedPotential += enteringProducts * one_inputlink.upstream.rejectrate
+                                    rejectedProducts = Decimal.Truncate(EPSILON + rejectedPotential / unitCycle) * unitCycle
+                                    one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
+                                    rejectedPotential -= rejectedProducts
+                                Else 'Continuous behaviour
+                                    rejectedProducts = enteringProducts * one_inputlink.upstream.rejectrate
+                                    one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
+                                End If
+                            End If
+
+                            'Put the products in internal accumulator
+                            Me.Content_Accu.Put(enteringProducts - rejectedProducts)
+                            statsCounts(enumType.Processed) += enteringProducts - rejectedProducts
+
+                            'Calculate the secondary product injection rate
+                            If injectrate > 0 Then
+                                If Not statsCounts.ContainsKey(enumType.Inject) Then statsCounts.Add(enumType.Inject, 0)
+                                If unitCycle > 0 Then
+                                    injectedPotential += injectrate * (enteringProducts - rejectedProducts)
+                                    injectedProducts = Decimal.Truncate(EPSILON + injectedPotential / unitCycle) * unitCycle
+                                    statsCounts(enumType.Inject) += injectedProducts
+                                    injectedPotential -= injectedProducts
+                                Else
+                                    injectedProducts = injectrate * (enteringProducts - rejectedProducts)
+                                    statsCounts(enumType.Inject) += injectedProducts
+                                End If
+                            End If
+
+                            upstreamwait = False 'At least one link has products
+
+                        End If
+
+                    Next 'next link to be processed
+
+                Else 'Outputs are assembled/separated, I tot. = min(O1, O2, ...) 
+
+                    'Presupposing maximum entering products
+                    Dim totalPotential As Decimal = Decimal.MaxValue
+
+                    'For each link, we check the best potential for combining
+                    For Each one_inputlink As clsLink In Inputs
+                        'if the link is declared empty, we don't process it
+                        If Not one_inputlink.state = clsLink.enumStates.Empty Then
+                            totalPotential = Math.Min(one_inputlink.potential, totalPotential)
                         Else
-                            enteringProducts = one_inputlink.upstream.Content_Accu.Pop(one_inputlink.potential)
+                            totalPotential = 0
                         End If
+                    Next
 
-                        If one_inputlink.upstream.rejectrate > 0 Then
-                            If Not one_inputlink.upstream.statsCounts.ContainsKey(enumType.Reject) Then
-                                one_inputlink.upstream.statsCounts.Add(enumType.Reject, 0)
-                            End If
-                            If unitCycle > 0 Then
-                                rejectedPotential += enteringProducts * one_inputlink.upstream.rejectrate
-                                rejectedProducts = Decimal.Truncate(EPSILON + rejectedPotential / unitCycle) * unitCycle
-                                one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
-                                rejectedPotential -= rejectedProducts
-                            Else
-                                rejectedProducts += enteringProducts * one_inputlink.upstream.rejectrate
-                                one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
-                            End If
-                        End If
+                    'If potential is not null
+                    If totalPotential > EPSILON Then
 
+                        For Each one_inputlink As clsLink In Inputs
+
+                            'Calculate the number of entering products for the link
+                            If unitCycle > 0 Then 'Cyclical behaviour
+                                acumulatedPotential += one_inputlink.upstream.Content_Accu.Pop(totalPotential)
+                                enteringProducts = Decimal.Truncate(EPSILON + acumulatedPotential / unitCycle) * unitCycle
+                                acumulatedPotential -= enteringProducts
+                            Else 'Continuous behaviour
+                                enteringProducts = one_inputlink.upstream.Content_Accu.Pop(totalPotential)
+                            End If
+
+                            'Calculate the rejected products at upstream equipment
+                            If one_inputlink.upstream.rejectrate > 0 Then
+                                If Not one_inputlink.upstream.statsCounts.ContainsKey(enumType.Reject) Then
+                                    one_inputlink.upstream.statsCounts.Add(enumType.Reject, 0)
+                                End If
+                                If unitCycle > 0 Then 'Cyclical behaviour
+                                    rejectedPotential += enteringProducts * one_inputlink.upstream.rejectrate
+                                    rejectedProducts = Decimal.Truncate(EPSILON + rejectedPotential / unitCycle) * unitCycle
+                                    one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
+                                    rejectedPotential -= rejectedProducts
+                                Else 'Continuous behaviour
+                                    rejectedProducts = enteringProducts * one_inputlink.upstream.rejectrate
+                                    one_inputlink.upstream.statsCounts(enumType.Reject) += rejectedProducts
+                                End If
+                            End If
+
+                            'Calculate the secondary product injection rate
+                            If injectrate > 0 Then
+                                If Not statsCounts.ContainsKey(enumType.Inject) Then statsCounts.Add(enumType.Inject, 0)
+                                If unitCycle > 0 Then
+                                    injectedPotential += injectrate * (enteringProducts - rejectedProducts)
+                                    injectedProducts = Decimal.Truncate(EPSILON + injectedPotential / unitCycle) * unitCycle
+                                    statsCounts(enumType.Inject) += injectedProducts
+                                    injectedPotential -= injectedProducts
+                                Else
+                                    injectedProducts = injectrate * (enteringProducts - rejectedProducts)
+                                    statsCounts(enumType.Inject) += injectedProducts
+                                End If
+                            End If
+
+                        Next 'next link to be processed
+
+                        'Put the products in internal accumulator
                         Me.Content_Accu.Put(enteringProducts - rejectedProducts)
                         statsCounts(enumType.Processed) += enteringProducts - rejectedProducts
 
-                        If injectrate > 0 Then
-                            If Not statsCounts.ContainsKey(enumType.Inject) Then statsCounts.Add(enumType.Inject, 0)
-                            If unitCycle > 0 Then
-                                injectedPotential += injectrate * (enteringProducts - rejectedProducts)
-                                injectedProducts = Decimal.Truncate(EPSILON + injectedPotential / unitCycle) * unitCycle
-                                statsCounts(enumType.Inject) += injectedProducts
-                                injectedPotential -= injectedProducts
-                            Else
-                                injectedProducts += injectrate * (enteringProducts - rejectedProducts)
-                                statsCounts(enumType.Inject) += injectedProducts
-                            End If
-                        End If
-                        upstreamwait = False
+                        upstreamwait = False 'All links have products
                     End If
-                Next
 
+                End If
+
+
+
+                'Manage downstream backup
                 Dim downstreamwait As Boolean = True
                 For Each one_outputlink As clsLink In Outputs
                     If Not one_outputlink.state = clsLink.enumStates.Full Then downstreamwait = False
                 Next
 
+                'Manage stats timebase
                 If upstreamwait Then
                     If Not statsState.ContainsKey(enumStates.WaitingInput) Then statsState.Add(enumStates.WaitingInput, 0)
                     statsState(enumStates.WaitingInput) += TIMEBASE
@@ -942,7 +1103,7 @@
                     If MTBF < MAX_TMBF And Not MTTR = 0 Then MTBF_next -= TIMEBASE
                 End If
 
-            Else
+            Else 'Equipment if stopped
                 If Not statsState.ContainsKey(enumStates.Stopped) Then statsState.Add(enumStates.Stopped, 0)
 
                 statsState(enumStates.Stopped) += TIMEBASE
@@ -1126,7 +1287,7 @@
         ''' <param name="_speed">Transit speed in products per second (to define minimum quantity for transit)</param>
         ''' <remarks></remarks>
         Public Sub SetAccumulator(ByVal _accumulated_content As Decimal, ByVal _transit_time As Integer, ByVal _speed As Decimal)
-            Content_Accu = New clsAccu(_accumulated_content + _transit_time * _speed, _transit_time)
+            Content_Accu = New clsAccu(_accumulated_content + _transit_time * _speed, _transit_time, Me)
         End Sub
 
         Public ReadOnly Property OutputPotential() As Decimal

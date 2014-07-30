@@ -6,53 +6,68 @@ ProduktivLineSimul
 </name>
 </assembly>
 <members>
-<member name="M:ProduktivLineSimul.Module1.ShowDistributions(System.Collections.Generic.List{System.Decimal})">
+<member name="M:ProduktivLineSimul.MainModule.ShowDistributions(System.Collections.Generic.List{System.Decimal})">
 	<summary>
  Show in the console the distribution of a list of values
  </summary>
 	<param name="_input">List of values to show</param>
 	<remarks></remarks>
-</member><member name="T:ProduktivLineSimul.Module1.clsAccu.clsCell">
+</member><member name="T:ProduktivLineSimul.MainModule.clsAccu.clsCell">
 	<summary>
  One Cell (timing separation for product distribution)
  </summary>
 	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul.Module1.clsAccu.#ctor(System.Decimal,System.Int32)">
+</member><member name="M:ProduktivLineSimul.MainModule.clsAccu.#ctor(System.Decimal,System.Int32,ProduktivLineSimul.MainModule.clsModular@)">
 	<summary>
- Create an accu with the sspecified parameters
+ Create an accu with the specified parameters
  </summary>
 	<param name="_max_content">Total number of product (capacity)</param>
 	<param name="_transit_time">Total time (in time units) between input and output</param>
 	<remarks></remarks>
-</member><member name="P:ProduktivLineSimul.Module1.clsAccu.Max_Content">
+</member><member name="P:ProduktivLineSimul.MainModule.clsAccu.Max_Content">
 	<summary>
  Return or change Max Content of the Accu
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:ProduktivLineSimul.Module1.clsModular.Content_entering">
+</member><member name="F:ProduktivLineSimul.MainModule.clsModular.InOutputs_Combining">
+	<summary>
+ Combining 1+1=2 or Assembling 1+1=1
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.checkPotential_pass1">
+	<summary>
+ Check the potential of each link by evaluating from outfeed and going upstream
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.checkPotential_pass2">
+	<summary>
+ Check the potential on assembling machines, balancing outputs, and effective presence of products
+ </summary>
+	<remarks></remarks>
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.Content_entering">
 	<summary>
  Get or Change number of entering products
  </summary>
 	<value>Numer of products to put inside</value>
 	<returns>Numer of products entering (not availables)</returns>
 	<remarks></remarks>
-</member><member name="P:ProduktivLineSimul.Module1.clsModular.Content">
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.Content">
 	<summary>
  Get total content inside the equipment
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:ProduktivLineSimul.Module1.clsModular.Content_Max">
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.Content_Max">
 	<summary>
  Get or Change max content of the equipment
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul.Module1.clsModular.SetAccumulator(System.Decimal,System.Int32,System.Decimal)">
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.SetAccumulator(System.Decimal,System.Int32,System.Decimal)">
 	<summary>
  Set up an accumulator for an equipment with an High quantity of products inside
  </summary>
@@ -60,7 +75,7 @@ ProduktivLineSimul
 	<param name="_transit_time">Transit time from infeed to outfeed at normal speed</param>
 	<param name="_speed">Transit speed in products per second (to define minimum quantity for transit)</param>
 	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul.Module1.clsModular.RunAccumulator">
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.RunAccumulator">
 	<summary>
  Run the accumulator between each turn
  </summary>
