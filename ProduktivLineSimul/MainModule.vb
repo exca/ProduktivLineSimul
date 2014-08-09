@@ -7,7 +7,7 @@
     Public Const MAX_TMBF As Decimal = 3600 * 8
     Friend LastTRPNum As Integer = 0
 
-    Friend Const RealisticDistributions As Boolean = True
+    Friend Const RealisticDistributions As Boolean = False
 
     Friend distriFiller() As Decimal
 
@@ -103,7 +103,8 @@
         'Project_Waters5L()
         'Project_Oil1L()
         'Project_PerfectLine()
-        Project_TestReturn()
+        'Project_TestReturn()
+        Project_Cosmetic200mL()
 
         'modInput.Content = 30000
 
@@ -113,7 +114,7 @@
             onemodule.init()
         Next
 
-        Dim i As Integer = 3600 * 8 * 4
+        Dim i As Integer = 3600 * 8
         Dim i_rem As Integer = 1
         While i > 0
 
@@ -130,11 +131,11 @@
                 onemodule.run()
             Next
 
-            Console.Clear()
-            For Each onemodule As clsModular In displayedModules
-                onemodule.details(True)
-            Next
-            System.Threading.Thread.Sleep(1000)
+            'Console.Clear()
+            'For Each onemodule As clsModular In displayedModules
+            '    onemodule.details(True)
+            'Next
+            'System.Threading.Thread.Sleep(1000)
 
             Math.DivRem(i, 3600, i_rem)
             If i_rem = 0 Then
@@ -199,6 +200,47 @@
         displayedModules.Add(modOutput)
 
     End Sub
+
+    Public Sub Project_Cosmetic200mL()
+
+        Dim modUnscr As New clsModular("Unscrambler", 204, clsModular.enumSpeedUnit.per_min, clsModular.enumParameters.Eff_MTTR, 0.9866, 53)
+
+        Dim modTrp1 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp1.SetAccumulator(5 * 204 / 60, 5, 204 / 60)
+
+        Dim modFiller As New clsModular("Filler", 200, clsModular.enumSpeedUnit.per_min, clsModular.enumParameters.Eff_MTTR, 0.9479, 27)
+        modCriticalMachine = modFiller
+
+        Dim modTrp2 As New clsModular(clsModular.enumModularType.Transport)
+        'modTrp2.SetAccumulator(5 * 204 / 60, 5, 204 / 60)
+        modTrp2.SetAccumulator((5 + 90) * 204 / 60, 10, 204 / 60)
+
+        Dim modLabel As New clsModular("Labeler", 204, clsModular.enumSpeedUnit.per_min, clsModular.enumParameters.Eff_MTTR, 0.9642, 60)
+
+        Dim modTrp3 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp3.SetAccumulator(5 * 204 / 60, 5, 204 / 60)
+
+        Dim modPack As New clsModular("Packer", 204, clsModular.enumSpeedUnit.per_min, clsModular.enumParameters.Eff_MTTR, 0.9168, 68)
+        modPack.unitCycle = 6
+
+        allLinks.Add(New clsLink(modInput, modUnscr))
+        allLinks.Add(New clsLink(modUnscr, modTrp1))
+        allLinks.Add(New clsLink(modTrp1, modFiller))
+        allLinks.Add(New clsLink(modFiller, modTrp2))
+        allLinks.Add(New clsLink(modTrp2, modLabel))
+        allLinks.Add(New clsLink(modLabel, modTrp3))
+        allLinks.Add(New clsLink(modTrp3, modPack))
+        allLinks.Add(New clsLink(modPack, modOutput))
+
+        displayedModules.Add(modUnscr)
+        displayedModules.Add(modFiller)
+        displayedModules.Add(modTrp2)
+        displayedModules.Add(modLabel)
+        displayedModules.Add(modPack)
+        displayedModules.Add(modOutput)
+
+    End Sub
+
 
     Public Sub Project_PerfectLine()
 
