@@ -1,0 +1,13 @@
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul_Interface.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul_Interface.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul_Interface.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Debug\ProduktivLineSimul.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.MainForm.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.Resources.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.vbproj.GenerateResource.Cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.pdb

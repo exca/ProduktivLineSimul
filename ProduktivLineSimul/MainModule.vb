@@ -1,4 +1,4 @@
-﻿Module MainModule
+﻿Public Module MainModule
 
     Public Const TIMEBASE As Decimal = 1
     Public Const NUMDECIMAL As Integer = 2
@@ -15,8 +15,8 @@
     Friend allLinks As New List(Of clsLink)
     Friend displayedModules As New List(Of clsModular)
 
-    Dim modInput As New clsModular(clsModular.enumModularType.Input)
-    Dim modOutput As New clsModular(clsModular.enumModularType.Output)
+    Public modInput As New clsModular(clsModular.enumModularType.Input)
+    Public modOutput As New clsModular(clsModular.enumModularType.Output)
     Dim modCriticalMachine As clsModular
 
     Sub Main()
@@ -29,6 +29,15 @@
 
         Console.ReadLine()
 
+    End Sub
+
+    ''' <summary>
+    ''' Reset counter on input and output
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub ResetInputOutputCounts()
+        modInput = New clsModular(clsModular.enumModularType.Input)
+        modOutput = New clsModular(clsModular.enumModularType.Output)
     End Sub
 
     Public Sub testDistributions()
@@ -241,7 +250,6 @@
 
     End Sub
 
-
     Public Sub Project_PerfectLine()
 
         Dim ProdPerHour As Decimal = 50000
@@ -253,30 +261,30 @@
         Dim modSBO As New clsModular("Blower", ProdPerHour * 1.1, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, EffAll, MTTRAll)
 
         Dim modTrp1 As New clsModular(clsModular.enumModularType.Transport)
-        modTrp1.Content_max = Accu * ProdPerMin
+        modTrp1.Content_Max = Accu * ProdPerMin
 
         Dim modFiller As New clsModular("Filler", ProdPerHour, clsModular.enumSpeedUnit.per_Hour)
         modCriticalMachine = modFiller
 
         Dim modTrp2 As New clsModular(clsModular.enumModularType.Transport)
-        modTrp2.Content_max = Accu * ProdPerMin
+        modTrp2.Content_Max = Accu * ProdPerMin
 
         Dim modLabel As New clsModular("Labeler", ProdPerHour * 1.1, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, EffAll, MTTRAll)
 
         Dim modTrp3 As New clsModular(clsModular.enumModularType.Transport)
-        modTrp3.Content_max = Accu * ProdPerMin
+        modTrp3.Content_Max = Accu * ProdPerMin
 
         Dim modPacker As New clsModular("Packer", ProdPerHour * 1.2, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, EffAll, MTTRAll)
         modPacker.unitCycle = 6
 
         Dim modTrp4 As New clsModular(clsModular.enumModularType.Transport)
-        modTrp4.Content_max = Accu * ProdPerMin
+        modTrp4.Content_Max = Accu * ProdPerMin
 
         Dim modPal As New clsModular("Pal", ProdPerHour * 1.3, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, EffAll, MTTRAll)
         modPal.unitCycle = 24
 
-        allLinks.Add(New clsLink(modInput, modSbo))
-        allLinks.Add(New clsLink(modSbo, modTrp1))
+        allLinks.Add(New clsLink(modInput, modSBO))
+        allLinks.Add(New clsLink(modSBO, modTrp1))
         allLinks.Add(New clsLink(modTrp1, modFiller))
         allLinks.Add(New clsLink(modFiller, modTrp2))
         allLinks.Add(New clsLink(modTrp2, modLabel))
@@ -442,6 +450,59 @@
 
     End Class
 
+    ''' <summary>
+    ''' Reset all link created
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub resetLinks()
+        allLinks.Clear()
+    End Sub
+
+    ''' <summary>
+    ''' Create a link between two equipments
+    ''' </summary>
+    ''' <param name="_from"></param>
+    ''' <param name="_to"></param>
+    ''' <remarks></remarks>
+    Public Sub addLink(ByRef _from As clsModular, ByRef _to As clsModular)
+        allLinks.Add(New clsLink(_from, _to))
+    End Sub
+
+    ''' <summary>
+    ''' Automatically define routes for simulation and initialize every module routed
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub DefineRoutesAndInit()
+        allModules = New List(Of clsModular)
+        modOutput.defineRoutes(allModules)
+
+        For Each onemodule As clsModular In allModules
+            onemodule.init()
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Launch simulation for one interval of time
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub Simulate_oneStep()
+        For Each onelink As clsLink In allLinks
+            onelink.resetPotential()
+        Next
+        For Each onemodule As clsModular In allModules
+            onemodule.checkPotential_pass1()
+        Next
+        For Each onemodule As clsModular In allModules
+            onemodule.checkPotential_pass2()
+        Next
+        For Each onemodule As clsModular In allModules
+            onemodule.run()
+        Next
+        For Each onemodule As clsModular In allModules
+            onemodule.prepareFormulasResults()
+        Next
+    End Sub
+
     Friend Class clsAccu
 
         ''' <summary>
@@ -605,20 +666,22 @@
 
     End Class
 
-    Friend Class clsModular
+    Public Class clsModular
 
         Friend name As String
         Friend modType As enumModularType
         Friend speed As Decimal = 0
-        Friend unitCycle As Decimal = 0
+        Public unitCycle As Decimal = 0
+        Public lastState As enumStates = enumStates.Undefined
+        Friend currentSpeed As Decimal = 0
 
         Friend acumulatedPotential As Decimal = 0
         Friend alreadyPlannedPotential As Decimal = 0
         Friend rejectedPotential As Decimal = 0
         Friend injectedPotential As Decimal = 0
 
-        Friend rejectrate As Decimal = 0
-        Friend injectrate As Decimal = 0
+        Public rejectrate As Decimal = 0
+        Public injectrate As Decimal = 0
 
         Friend MTTR As Decimal = 0
         Friend MTBF As Decimal = Decimal.MaxValue
@@ -633,6 +696,7 @@
 
         Friend statsState As New Dictionary(Of enumStates, Decimal)
         Friend statsCounts As New Dictionary(Of enumType, Decimal)
+        Friend statsFormulas As New Dictionary(Of enumFormulas, String)
 
         Friend statsMTBF As New List(Of Decimal)
         Friend statsMTTR As New List(Of Decimal)
@@ -645,7 +709,12 @@
         ''' <remarks></remarks>
         Friend InOutputs_Combining As Boolean = True 'Or Assembling inputs/outputs
 
-        Friend Enum enumStates As Integer
+        ''' <summary>
+        ''' Avalables machines states
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum enumStates As Integer
+            Undefined
             Stopped
             Running
             WaitingInput
@@ -658,13 +727,18 @@
             Reject
         End Enum
 
-        Friend Enum enumModularType As Integer
+        Public Enum enumModularType As Integer
             Input
             Output
             Transport
             Machine
         End Enum
 
+        ''' <summary>
+        ''' Create equipment only by defining its type
+        ''' </summary>
+        ''' <param name="_type">Defined by type</param>
+        ''' <remarks></remarks>
         Public Sub New(ByVal _type As enumModularType)
             speed = Decimal.MaxValue
             modType = _type
@@ -684,6 +758,13 @@
 
         End Sub
 
+        ''' <summary>
+        ''' Create a Machine equipment defining only its speed
+        ''' </summary>
+        ''' <param name="_name"></param>
+        ''' <param name="_speed"></param>
+        ''' <param name="_unit"></param>
+        ''' <remarks></remarks>
         Public Sub New(ByVal _name As String, ByVal _speed As Decimal, ByVal _unit As enumSpeedUnit)
             name = _name
             modType = enumModularType.Machine
@@ -699,19 +780,37 @@
             End Select
         End Sub
 
-        Friend Enum enumSpeedUnit As Integer
+        ''' <summary>
+        ''' Define speed unit
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum enumSpeedUnit As Integer
             per_Sec
             per_min
             per_Hour
             sec_per_Cycle
         End Enum
 
-        Friend Enum enumParameters As Integer
+        ''' <summary>
+        ''' Define how the paameters are passed when creating
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum enumParameters As Integer
             MTTR_MTBF
             Eff_MTBF
             Eff_MTTR
         End Enum
 
+        ''' <summary>
+        ''' Create a Machine equipment with all the availables parameters
+        ''' </summary>
+        ''' <param name="_name">Name of the equipment</param>
+        ''' <param name="_speed">Speed with the defined unit</param>
+        ''' <param name="_unit">Unit used to define speed</param>
+        ''' <param name="_params">Parameters definition</param>
+        ''' <param name="_MTTR_or_Eff">According to parameters definition</param>
+        ''' <param name="_MTBF_or_MTTR">According to parameters definition</param>
+        ''' <remarks></remarks>
         Public Sub New(ByVal _name As String, ByVal _speed As Decimal, ByVal _unit As enumSpeedUnit, ByVal _params As enumParameters, ByVal _MTTR_or_Eff As Decimal, ByVal _MTBF_or_MTTR As Decimal)
             name = _name
             modType = enumModularType.Machine
@@ -740,7 +839,7 @@
 
         End Sub
 
-        Public Sub init()
+        Friend Sub init()
 
             If Initialized Then Return
 
@@ -760,7 +859,7 @@
 
         End Sub
 
-        Public Sub defineRoutes(ByRef _modules As List(Of clsModular))
+        Friend Sub defineRoutes(ByRef _modules As List(Of clsModular))
 
             If Not _modules.Contains(Me) Then _modules.Add(Me)
             For Each oneInputLink As clsLink In Inputs
@@ -776,7 +875,7 @@
         ''' Check the potential of each link by evaluating from outfeed and going upstream
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub checkPotential_pass1()
+        Friend Sub checkPotential_pass1()
 
             'Manage time before breackdown and breackdown duration
             If MTBF < MAX_TMBF And Not MTTR = 0 Then
@@ -958,7 +1057,7 @@
         ''' Check the potential on assembling machines, balancing outputs, and effective presence of products
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub checkPotential_pass2()
+        Friend Sub checkPotential_pass2()
 
             'TODO: Check effective presence of products
 
@@ -984,8 +1083,11 @@
 
         End Sub
 
-
-        Public Sub run()
+        ''' <summary>
+        ''' Apply the potentials calculated
+        ''' </summary>
+        ''' <remarks></remarks>
+        Friend Sub run()
 
             'If there is no breakdown, the equipment is processing
             If MTBF_next > 0 Then
@@ -996,9 +1098,13 @@
                 Dim rejectedProducts As Decimal = 0
                 Dim injectedProducts As Decimal = 0
 
+                'Reset last calculated speed
+                currentSpeed = 0.0
+
                 Dim upstreamwait As Boolean = True
 
                 If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
+
 
                     For Each one_inputlink As clsLink In Inputs
 
@@ -1013,6 +1119,9 @@
                             Else 'Continuous behaviour
                                 enteringProducts = one_inputlink.upstream.Content_Accu.Pop(one_inputlink.potential)
                             End If
+
+                            'Calculate current speed
+                            currentSpeed += enteringProducts
 
                             'Calculate the rejected products at upstream equipment
                             If one_inputlink.upstream.rejectrate > 0 Then
@@ -1068,6 +1177,9 @@
                             totalPotential = 0
                         End If
                     Next
+
+                    'Keep potential as current speed
+                    currentSpeed = totalPotential
 
                     'If potential is not null
                     If totalPotential > EPSILON Then
@@ -1125,7 +1237,6 @@
                 End If
 
 
-
                 'Manage downstream backup
                 Dim downstreamwait As Boolean = True
                 For Each one_outputlink As clsLink In Outputs
@@ -1136,27 +1247,167 @@
                 If upstreamwait Then
                     If Not statsState.ContainsKey(enumStates.WaitingInput) Then statsState.Add(enumStates.WaitingInput, 0)
                     statsState(enumStates.WaitingInput) += TIMEBASE
+                    lastState = enumStates.WaitingInput
                 ElseIf downstreamwait Then
                     If Not statsState.ContainsKey(enumStates.WaitingOutput) Then statsState.Add(enumStates.WaitingOutput, 0)
                     statsState(enumStates.WaitingOutput) += TIMEBASE
+                    lastState = enumStates.WaitingOutput
                 Else
                     If Not statsState.ContainsKey(enumStates.Running) Then statsState.Add(enumStates.Running, 0)
                     statsState(enumStates.Running) += TIMEBASE
+                    lastState = enumStates.Running
                     If MTBF < MAX_TMBF And Not MTTR = 0 Then MTBF_next -= TIMEBASE
                 End If
 
             Else 'Equipment if stopped
+                currentSpeed = 0.0
+
                 If Not statsState.ContainsKey(enumStates.Stopped) Then statsState.Add(enumStates.Stopped, 0)
 
                 statsState(enumStates.Stopped) += TIMEBASE
+                lastState = enumStates.Stopped
                 If MTBF < MAX_TMBF And Not MTTR = 0 Then MTTR_next -= TIMEBASE
             End If
 
+        End Sub
 
+        ''' <summary>
+        ''' Stop request from user
+        ''' </summary>
+        ''' <remarks>Allowing user interraction</remarks>
+        Public Sub stopRequest()
+            If MTBF < MAX_TMBF And Not MTTR = 0 Then
+                If MTBF_next > 1 Then
+                    'Force stop
+                    MTBF_next = 0
+                End If
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' List of all the formulas availables
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum enumFormulas As Integer
+            Undefined
+            Speed_Max
+            Speed_Current
+            Content
+            Content_max
+            Content_entering
+            Content_use_percent
+            Content_use_percent_txt
+            Counter_Processed
+            Counter_Injected
+            Counter_Rejected
+            TotalTime
+            Time_Running
+            Time_Stopped
+            Time_WaitingUpstream
+            Time_WaitingDownstream
+            OEE
+            OEE_Quality
+            OEE_Efficiency
+            OEE_OperationalAvailability
+            Performance
+            Reliability
+        End Enum
+
+        ''' <summary>
+        ''' Return selected formula's result
+        ''' </summary>
+        ''' <param name="_formula">Formula to be calculated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function getFormulaResult(ByVal _formula As enumFormulas) As String
+            If statsFormulas.ContainsKey(_formula) Then
+                Return statsFormulas(_formula)
+            Else
+                Return "N/A"
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Prepare calculation for formulas to be displayed
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub prepareFormulasResults()
+
+            'Clear all formulas results
+            statsFormulas.Clear()
+
+            statsFormulas.Add(enumFormulas.Speed_Max, displaySpeed(speed))
+            statsFormulas.Add(enumFormulas.Speed_Current, displaySpeed(currentSpeed))
+
+            If Content_Max > 0 Then
+                statsFormulas.Add(enumFormulas.Content, displayDecimal(Content))
+                statsFormulas.Add(enumFormulas.Content_entering, displayDecimal(Content_entering))
+                statsFormulas.Add(enumFormulas.Content_max, displayDecimal(Content_Max))
+                statsFormulas.Add(enumFormulas.Content_use_percent, Math.Max(Math.Min(CInt(100 * (Content / Content_Max)), 100), 0))
+                statsFormulas.Add(enumFormulas.Content_use_percent_txt, displayDecimal(100 * (Content / Content_Max)) & " %")
+            End If
+
+            For Each oneCounter As enumType In statsCounts.Keys
+                Select Case oneCounter
+                    Case enumType.Processed
+                        statsFormulas.Add(enumFormulas.Counter_Processed, displayDecimal(statsCounts(oneCounter)))
+                    Case enumType.Inject
+                        statsFormulas.Add(enumFormulas.Counter_Injected, displayDecimal(statsCounts(oneCounter)))
+                    Case enumType.Reject
+                        statsFormulas.Add(enumFormulas.Counter_Rejected, displayDecimal(statsCounts(oneCounter)))
+                End Select
+            Next
+
+            Dim totalTime As Decimal = 0
+            For Each oneState As enumStates In statsState.Keys
+                totalTime += statsState(oneState)
+            Next
+
+            For Each oneState As enumStates In statsState.Keys
+                Select Case oneState
+                    Case enumStates.Running
+                        statsFormulas.Add(enumFormulas.Time_Running, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                    Case enumStates.Stopped
+                        statsFormulas.Add(enumFormulas.Time_Stopped, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                    Case enumStates.WaitingInput
+                        statsFormulas.Add(enumFormulas.Time_WaitingUpstream, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                    Case enumStates.WaitingOutput
+                        statsFormulas.Add(enumFormulas.Time_WaitingDownstream, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                End Select
+            Next
+
+            Dim opAvailab As Decimal = totalTime
+            If statsState.ContainsKey(enumStates.WaitingInput) Then opAvailab -= statsState(enumStates.WaitingInput)
+            If statsState.ContainsKey(enumStates.WaitingOutput) Then opAvailab -= statsState(enumStates.WaitingOutput)
+            If statsCounts.ContainsKey(enumType.Processed) And speed < MAX_SPEED Then
+                Dim goodProd As Decimal = statsCounts(enumType.Processed)
+                If statsCounts.ContainsKey(enumType.Reject) Then goodProd -= statsCounts(enumType.Reject)
+                If totalTime > 0 And speed > 0 Then statsFormulas.Add(enumFormulas.OEE, displayDecimal(100 * goodProd / (totalTime * speed)) & " %")
+                If statsCounts(enumType.Processed) > 0 Then statsFormulas.Add(enumFormulas.OEE_Quality, displayDecimal(100 * goodProd / statsCounts(enumType.Processed)) & " %")
+                If opAvailab > 0 And speed > 0 Then statsFormulas.Add(enumFormulas.OEE_Efficiency, displayDecimal(100 * statsCounts(enumType.Processed) / (opAvailab * speed)) & " %")
+            End If
+            statsFormulas.Add(enumFormulas.OEE_OperationalAvailability, displayDecimal(100 * opAvailab / totalTime) & " %")
+            If statsState.ContainsKey(enumStates.Running) Then
+                If statsCounts.ContainsKey(enumType.Processed) And speed < MAX_SPEED Then
+                    If statsCounts(enumType.Processed) > 0 And speed > 0 Then
+                        statsFormulas.Add(enumFormulas.Performance, displayDecimal(100 * statsCounts(enumType.Processed) / (statsState(enumStates.Running) * speed)) & " %")
+                    End If
+                End If
+                If opAvailab > 0 Then statsFormulas.Add(enumFormulas.Reliability, displayDecimal(100 * statsState(enumStates.Running) / opAvailab) & " %")
+            End If
 
         End Sub
 
-        Public Sub details(Optional ByVal _infoByType As Boolean = False, Optional ByVal _bufferOnly As Boolean = False, Optional ByVal _counterOnly As Boolean = False, Optional ByVal _advancedResults As Boolean = False)
+
+        ''' <summary>
+        ''' Print details about equipment
+        ''' </summary>
+        ''' <param name="_infoByType"></param>
+        ''' <param name="_bufferOnly"></param>
+        ''' <param name="_counterOnly"></param>
+        ''' <param name="_advancedResults"></param>
+        ''' <remarks></remarks>
+        Friend Sub details(Optional ByVal _infoByType As Boolean = False, Optional ByVal _bufferOnly As Boolean = False, Optional ByVal _counterOnly As Boolean = False, Optional ByVal _advancedResults As Boolean = False)
 
             If _infoByType Then
                 Select Case modType
@@ -1171,7 +1422,7 @@
                 _bufferOnly = False
             End If
 
-            Console.Write(name & " (speed: " & displaySpeed(speed) & ")")
+            Console.Write(name & " (speed: " & displaySpeed(currentSpeed) & ")")
             If MTBF_next <= 0 Then Console.Write(" [OWN STOP for " & toTimeDuration(MTTR_next) & "]")
             If MTBF_next > 0 And MTBF_next < MAX_TMBF Then Console.Write(" [RUNNING for " & toTimeDuration(MTBF_next) & "]")
             Console.WriteLine()
@@ -1332,13 +1583,13 @@
             Content_Accu = New clsAccu(_accumulated_content + _transit_time * _speed, _transit_time, Me)
         End Sub
 
-        Public ReadOnly Property OutputPotential() As Decimal
+        Friend ReadOnly Property OutputPotential() As Decimal
             Get
                 Return Content_Accu.OutputPotential()
             End Get
         End Property
 
-        Public ReadOnly Property InputPotential() As Decimal
+        Friend ReadOnly Property InputPotential() As Decimal
             Get
                 Return Content_Accu.InputPotential()
             End Get
@@ -1348,7 +1599,7 @@
         ''' Run the accumulator between each turn
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub RunAccumulator()
+        Friend Sub RunAccumulator()
             Content_Accu.init()
         End Sub
 

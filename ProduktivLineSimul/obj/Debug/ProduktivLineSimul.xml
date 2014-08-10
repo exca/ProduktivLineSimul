@@ -6,11 +6,38 @@ ProduktivLineSimul
 </name>
 </assembly>
 <members>
-<member name="M:ProduktivLineSimul.MainModule.ShowDistributions(System.Collections.Generic.List{System.Decimal})">
+<member name="M:ProduktivLineSimul.MainModule.ResetInputOutputCounts">
+	<summary>
+ Reset counter on input and output
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.ShowDistributions(System.Collections.Generic.List{System.Decimal})">
 	<summary>
  Show in the console the distribution of a list of values
  </summary>
 	<param name="_input">List of values to show</param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.resetLinks">
+	<summary>
+ Reset all link created
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.addLink(ProduktivLineSimul.MainModule.clsModular@,ProduktivLineSimul.MainModule.clsModular@)">
+	<summary>
+ Create a link between two equipments
+ </summary>
+	<param name="_from"></param>
+	<param name="_to"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.DefineRoutesAndInit">
+	<summary>
+ Automatically define routes for simulation and initialize every module routed
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.Simulate_oneStep">
+	<summary>
+ Launch simulation for one interval of time
+ </summary>
 	<remarks></remarks>
 </member><member name="T:ProduktivLineSimul.MainModule.clsAccu.clsCell">
 	<summary>
@@ -36,6 +63,46 @@ ProduktivLineSimul
  Combining 1+1=2 or Assembling 1+1=1
  </summary>
 	<remarks></remarks>
+</member><member name="T:ProduktivLineSimul.MainModule.clsModular.enumStates">
+	<summary>
+ Avalables machines states
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.#ctor(ProduktivLineSimul.MainModule.clsModular.enumModularType)">
+	<summary>
+ Create equipment only by defining its type
+ </summary>
+	<param name="_type">Defined by type</param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.#ctor(System.String,System.Decimal,ProduktivLineSimul.MainModule.clsModular.enumSpeedUnit)">
+	<summary>
+ Create a Machine equipment defining only its speed
+ </summary>
+	<param name="_name"></param>
+	<param name="_speed"></param>
+	<param name="_unit"></param>
+	<remarks></remarks>
+</member><member name="T:ProduktivLineSimul.MainModule.clsModular.enumSpeedUnit">
+	<summary>
+ Define speed unit
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ProduktivLineSimul.MainModule.clsModular.enumParameters">
+	<summary>
+ Define how the paameters are passed when creating
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.#ctor(System.String,System.Decimal,ProduktivLineSimul.MainModule.clsModular.enumSpeedUnit,ProduktivLineSimul.MainModule.clsModular.enumParameters,System.Decimal,System.Decimal)">
+	<summary>
+ Create a Machine equipment with all the availables parameters
+ </summary>
+	<param name="_name">Name of the equipment</param>
+	<param name="_speed">Speed with the defined unit</param>
+	<param name="_unit">Unit used to define speed</param>
+	<param name="_params">Parameters definition</param>
+	<param name="_MTTR_or_Eff">According to parameters definition</param>
+	<param name="_MTBF_or_MTTR">According to parameters definition</param>
+	<remarks></remarks>
 </member><member name="M:ProduktivLineSimul.MainModule.clsModular.checkPotential_pass1">
 	<summary>
  Check the potential of each link by evaluating from outfeed and going upstream
@@ -45,6 +112,42 @@ ProduktivLineSimul
 	<summary>
  Check the potential on assembling machines, balancing outputs, and effective presence of products
  </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.run">
+	<summary>
+ Apply the potentials calculated
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.stopRequest">
+	<summary>
+ Stop request from user
+ </summary>
+	<remarks>Allowing user interraction</remarks>
+</member><member name="T:ProduktivLineSimul.MainModule.clsModular.enumFormulas">
+	<summary>
+ List of all the formulas availables
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.getFormulaResult(ProduktivLineSimul.MainModule.clsModular.enumFormulas)">
+	<summary>
+ Return selected formula's result
+ </summary>
+	<param name="_formula">Formula to be calculated</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.prepareFormulasResults">
+	<summary>
+ Prepare calculation for formulas to be displayed
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.details(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+	<summary>
+ Print details about equipment
+ </summary>
+	<param name="_infoByType"></param>
+	<param name="_bufferOnly"></param>
+	<param name="_counterOnly"></param>
+	<param name="_advancedResults"></param>
 	<remarks></remarks>
 </member><member name="P:ProduktivLineSimul.MainModule.clsModular.Content_entering">
 	<summary>

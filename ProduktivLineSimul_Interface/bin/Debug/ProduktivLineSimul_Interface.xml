@@ -1,0 +1,123 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ProduktivLineSimul_Interface
+</name>
+</assembly>
+<members>
+<member name="P:ProduktivLineSimul_Interface.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ProduktivLineSimul_Interface.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ProduktivLineSimul_Interface.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.MainForm_Load(System.Object,System.EventArgs)">
+	<summary>
+ Initialize variables and modules for simulation tool
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="T:ProduktivLineSimul_Interface.MainForm.ProjectTypes">
+	<summary>
+ Types of projects handled by the simulator
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.Initialize_Project(ProduktivLineSimul_Interface.MainForm.ProjectTypes)">
+	<summary>
+ Initialize the project in the simulator view
+ </summary>
+	<param name="_projectType"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.Project_PETLine">
+	<summary>
+ Initialize PETLine project
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.StartSimul_Click(System.Object,System.EventArgs)">
+	<summary>
+ Enable timer for real-time simulation
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.Timer1_Tick(System.Object,System.EventArgs)">
+	<summary>
+ Simulate one step at each interval of time
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.RefreshValues">
+	<summary>
+ Refresh displayed values
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.getRessourceForMachineState(ProduktivLineSimul.MainModule.clsModular@)">
+	<summary>
+ Return image to be deisplayed for equipment state
+ </summary>
+	<param name="_machine"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.getInfosOnEquipment(ProduktivLineSimul.MainModule.clsModular@,System.Boolean)">
+	<summary>
+ Return basical information about the equipment state
+ </summary>
+	<param name="_machine"></param>
+	<param name="_criticalMachine"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox1_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_Blower
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox4_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_Filler
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox8_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_Labeller
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox12_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_Packer
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox14_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_Pal
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox16_Click(System.Object,System.EventArgs)">
+	<summary>
+ User interraction, stop on PET_PalWrapper
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
