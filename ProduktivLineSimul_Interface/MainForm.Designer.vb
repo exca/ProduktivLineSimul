@@ -66,6 +66,7 @@ Partial Class MainForm
         Me.PictureBox3 = New System.Windows.Forms.PictureBox
         Me.PictureBox4 = New System.Windows.Forms.PictureBox
         Me.GroupBox3 = New System.Windows.Forms.GroupBox
+        Me.Label9 = New System.Windows.Forms.Label
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
         Me.Label3 = New System.Windows.Forms.Label
         Me.PictureBox5 = New System.Windows.Forms.PictureBox
@@ -75,6 +76,7 @@ Partial Class MainForm
         Me.PictureBox7 = New System.Windows.Forms.PictureBox
         Me.PictureBox8 = New System.Windows.Forms.PictureBox
         Me.GroupBox5 = New System.Windows.Forms.GroupBox
+        Me.Label10 = New System.Windows.Forms.Label
         Me.ProgressBar2 = New System.Windows.Forms.ProgressBar
         Me.Label5 = New System.Windows.Forms.Label
         Me.PictureBox9 = New System.Windows.Forms.PictureBox
@@ -92,8 +94,6 @@ Partial Class MainForm
         Me.PictureBox15 = New System.Windows.Forms.PictureBox
         Me.PictureBox16 = New System.Windows.Forms.PictureBox
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Label9 = New System.Windows.Forms.Label
-        Me.Label10 = New System.Windows.Forms.Label
         Me.ToolStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
@@ -483,6 +483,16 @@ Partial Class MainForm
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Accumulation"
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.BackColor = System.Drawing.Color.Transparent
+        Me.Label9.Location = New System.Drawing.Point(86, 149)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(49, 16)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "Label9"
+        '
         'ProgressBar1
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(6, 145)
@@ -581,6 +591,16 @@ Partial Class MainForm
         Me.GroupBox5.TabIndex = 0
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Accumulation"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.BackColor = System.Drawing.Color.Transparent
+        Me.Label10.Location = New System.Drawing.Point(86, 149)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(56, 16)
+        Me.Label10.TabIndex = 6
+        Me.Label10.Text = "Label10"
         '
         'ProgressBar2
         '
@@ -757,26 +777,6 @@ Partial Class MainForm
         'Timer1
         '
         Me.Timer1.Interval = 1000
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.BackColor = System.Drawing.Color.Transparent
-        Me.Label9.Location = New System.Drawing.Point(86, 149)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(49, 16)
-        Me.Label9.TabIndex = 5
-        Me.Label9.Text = "Label9"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.BackColor = System.Drawing.Color.Transparent
-        Me.Label10.Location = New System.Drawing.Point(86, 149)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(56, 16)
-        Me.Label10.TabIndex = 6
-        Me.Label10.Text = "Label10"
         '
         'MainForm
         '

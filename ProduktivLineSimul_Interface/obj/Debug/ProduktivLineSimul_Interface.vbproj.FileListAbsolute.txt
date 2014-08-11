@@ -11,3 +11,4 @@ C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\D
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.exe
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.xml
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.FastSimulDialog.resources

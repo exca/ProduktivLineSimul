@@ -118,6 +118,20 @@ ProduktivLineSimul_Interface
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.ToolStripButton1_Click(System.Object,System.EventArgs)">
+	<summary>
+ Launch a 8-hours simulation
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.ToolStripButton3_Click(System.Object,System.EventArgs)">
+	<summary>
+ Pause simulation
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
 </member>
 </members>
 </doc>

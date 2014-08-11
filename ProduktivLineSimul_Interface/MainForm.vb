@@ -81,13 +81,13 @@
         PET_Filler.rejectrate = 0.0025
 
         PET_Accu1 = New ProduktivLineSimul.clsModular(ProduktivLineSimul.clsModular.enumModularType.Transport)
-        PET_Accu1.SetAccumulator(2000, 15, 42)
+        PET_Accu1.SetAccumulator(800, 15, 42)
 
         PET_Labeller = New ProduktivLineSimul.clsModular("Labeler", 28750, ProduktivLineSimul.clsModular.enumSpeedUnit.per_Hour, ProduktivLineSimul.clsModular.enumParameters.Eff_MTTR, 0.95, 35)
         PET_Labeller.rejectrate = 0.001
 
         PET_Accu2 = New ProduktivLineSimul.clsModular(ProduktivLineSimul.clsModular.enumModularType.Transport)
-        PET_Accu2.SetAccumulator(2000, 15, 48)
+        PET_Accu2.SetAccumulator(800, 15, 48)
 
         PET_Packer = New ProduktivLineSimul.clsModular("Packer", 32500, ProduktivLineSimul.clsModular.enumSpeedUnit.per_Hour, ProduktivLineSimul.clsModular.enumParameters.Eff_MTTR, 0.95, 55)
         PET_Packer.unitCycle = 6
@@ -278,6 +278,33 @@
     ''' <remarks></remarks>
     Private Sub PictureBox16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox16.Click
         PET_PalWrapper.stopRequest()
+    End Sub
+
+    ''' <summary>
+    ''' Launch a 8-hours simulation
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click, Simulate8HoursToolStripMenuItem.Click
+        Timer1.Stop()
+
+        'Simulate 8 hours
+        Dim fastExecution As New FastSimulDialog(8 * 60 * 60)
+        fastExecution.ShowDialog()
+
+        'Show results
+        RefreshValues()
+    End Sub
+
+    ''' <summary>
+    ''' Pause simulation
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
+        Timer1.Stop()
     End Sub
 
 End Class

@@ -485,7 +485,7 @@
     ''' Launch simulation for one interval of time
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub Simulate_oneStep()
+    Public Sub Simulate_oneStep(Optional ByVal _calculateFormulas As Boolean = True)
         For Each onelink As clsLink In allLinks
             onelink.resetPotential()
         Next
@@ -498,9 +498,11 @@
         For Each onemodule As clsModular In allModules
             onemodule.run()
         Next
-        For Each onemodule As clsModular In allModules
-            onemodule.prepareFormulasResults()
-        Next
+        If _calculateFormulas Then
+            For Each onemodule As clsModular In allModules
+                onemodule.prepareFormulasResults()
+            Next
+        End If
     End Sub
 
     Friend Class clsAccu
