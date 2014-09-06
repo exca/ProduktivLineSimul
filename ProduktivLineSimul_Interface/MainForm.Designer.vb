@@ -396,19 +396,20 @@ Partial Class MainForm
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(6, 170)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(49, 16)
+        Me.Label1.Size = New System.Drawing.Size(39, 13)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
         '
         'PictureBox2
         '
         Me.PictureBox2.BackColor = System.Drawing.Color.White
-        Me.PictureBox2.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources._02_redo_icon
-        Me.PictureBox2.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox2.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources.redo_icon_2
+        Me.PictureBox2.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox2.TabIndex = 1
         Me.PictureBox2.TabStop = False
@@ -440,19 +441,20 @@ Partial Class MainForm
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(6, 170)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(49, 16)
+        Me.Label2.Size = New System.Drawing.Size(39, 13)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Label2"
         '
         'PictureBox3
         '
         Me.PictureBox3.BackColor = System.Drawing.Color.White
-        Me.PictureBox3.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources._158_wrench_2_icon
-        Me.PictureBox3.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox3.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources.wrench_2_icon_158
+        Me.PictureBox3.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox3.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox3.TabIndex = 1
         Me.PictureBox3.TabStop = False
@@ -505,19 +507,20 @@ Partial Class MainForm
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(6, 170)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(49, 16)
+        Me.Label3.Size = New System.Drawing.Size(39, 13)
         Me.Label3.TabIndex = 3
         Me.Label3.Text = "Label2"
         '
         'PictureBox5
         '
         Me.PictureBox5.BackColor = System.Drawing.Color.White
-        Me.PictureBox5.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources._11_clock_icon
-        Me.PictureBox5.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox5.Image = Global.ProduktivLineSimul_Interface.My.Resources.Resources.clock_icon_11
+        Me.PictureBox5.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox5.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox5.TabIndex = 1
         Me.PictureBox5.TabStop = False
@@ -549,9 +552,10 @@ Partial Class MainForm
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(6, 170)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(49, 16)
+        Me.Label4.Size = New System.Drawing.Size(39, 13)
         Me.Label4.TabIndex = 3
         Me.Label4.Text = "Label2"
         '
@@ -559,9 +563,9 @@ Partial Class MainForm
         '
         Me.PictureBox7.BackColor = System.Drawing.Color.White
         Me.PictureBox7.Image = CType(resources.GetObject("PictureBox7.Image"), System.Drawing.Image)
-        Me.PictureBox7.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox7.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox7.Name = "PictureBox7"
-        Me.PictureBox7.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox7.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox7.TabIndex = 1
         Me.PictureBox7.TabStop = False
@@ -614,9 +618,10 @@ Partial Class MainForm
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.Location = New System.Drawing.Point(6, 170)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(49, 16)
+        Me.Label5.Size = New System.Drawing.Size(39, 13)
         Me.Label5.TabIndex = 3
         Me.Label5.Text = "Label2"
         '
@@ -624,9 +629,9 @@ Partial Class MainForm
         '
         Me.PictureBox9.BackColor = System.Drawing.Color.White
         Me.PictureBox9.Image = CType(resources.GetObject("PictureBox9.Image"), System.Drawing.Image)
-        Me.PictureBox9.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox9.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox9.Name = "PictureBox9"
-        Me.PictureBox9.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox9.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox9.TabIndex = 1
         Me.PictureBox9.TabStop = False
@@ -658,9 +663,10 @@ Partial Class MainForm
         'Label6
         '
         Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(6, 170)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(49, 16)
+        Me.Label6.Size = New System.Drawing.Size(39, 13)
         Me.Label6.TabIndex = 3
         Me.Label6.Text = "Label2"
         '
@@ -668,9 +674,9 @@ Partial Class MainForm
         '
         Me.PictureBox11.BackColor = System.Drawing.Color.White
         Me.PictureBox11.Image = CType(resources.GetObject("PictureBox11.Image"), System.Drawing.Image)
-        Me.PictureBox11.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox11.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox11.Name = "PictureBox11"
-        Me.PictureBox11.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox11.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox11.TabIndex = 1
         Me.PictureBox11.TabStop = False
@@ -702,9 +708,10 @@ Partial Class MainForm
         'Label7
         '
         Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(6, 170)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(49, 16)
+        Me.Label7.Size = New System.Drawing.Size(39, 13)
         Me.Label7.TabIndex = 3
         Me.Label7.Text = "Label2"
         '
@@ -712,9 +719,9 @@ Partial Class MainForm
         '
         Me.PictureBox13.BackColor = System.Drawing.Color.White
         Me.PictureBox13.Image = CType(resources.GetObject("PictureBox13.Image"), System.Drawing.Image)
-        Me.PictureBox13.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox13.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox13.Name = "PictureBox13"
-        Me.PictureBox13.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox13.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox13.TabIndex = 1
         Me.PictureBox13.TabStop = False
@@ -746,9 +753,10 @@ Partial Class MainForm
         'Label8
         '
         Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(6, 170)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(49, 16)
+        Me.Label8.Size = New System.Drawing.Size(39, 13)
         Me.Label8.TabIndex = 3
         Me.Label8.Text = "Label2"
         '
@@ -756,9 +764,9 @@ Partial Class MainForm
         '
         Me.PictureBox15.BackColor = System.Drawing.Color.White
         Me.PictureBox15.Image = CType(resources.GetObject("PictureBox15.Image"), System.Drawing.Image)
-        Me.PictureBox15.Location = New System.Drawing.Point(172, 21)
+        Me.PictureBox15.Location = New System.Drawing.Point(189, 21)
         Me.PictureBox15.Name = "PictureBox15"
-        Me.PictureBox15.Size = New System.Drawing.Size(50, 50)
+        Me.PictureBox15.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox15.TabIndex = 1
         Me.PictureBox15.TabStop = False

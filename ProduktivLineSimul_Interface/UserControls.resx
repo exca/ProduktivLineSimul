@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,32 +117,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Janik_Baumgartner_Woocons_Button_Pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Button-Pause.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAC0SURBVFhHY2AYBUM1BFxcXN4D8X8QDfMDkhiKOFX8CDRcAYjXQy0FWUAQU8VikCFQy2E+Jmgx
+        zHHUdMB8YnyMroaaDiDa18iOoLYDQFFQgJTg9gP5YEzzRAi05DwQCyD7iCY+JSXIRh0wGgKjITCgIQCt
+        G5BLRwVSsjDFaoEOSEAr9xMoNpQUA6AlI3IInCdFP8VqsdWMFBtKigGjDhgNgdEQGAwhsBnNEZtJycaj
+        agdVCAAA0noSCl1fufQAAAAASUVORK5CYII=
+</value>
   </data>
-  <data name="Omercetin_Pixelophilia_Recycle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Omercetin-Pixelophilia-Recycle.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAFbSURBVFhH7VbbDcIwDGQERmAERuCje3aEjtAROgIjMAL4IhtdooTGqdqARCWrIfhxOT/S0+n/
+        OBgYhmEWearMDlO/qgQ5i1zY8hMA6MLGHyljocEXeT9ErlDBW+RODGDN/0EXNttAUHCj2hzb7/RtQG1/
+        GwilEkFLAdf2YRulzp0WpbsEAieE5IC8U+YOmhpkgkx8MmUKewxk2RyYCo4dTyXHAiAFEQqz6dE2Q69z
+        tQNIMafKBIOFLXz450Qhr6u0lmrCzcI3AAjUdUuBUaZteHwRJnM/7fXD27DPIOo+irtfRjoJ8S1gt1zz
+        dSw+bhD3PCAQ0VjVFrXuiCaddg6AB1EfQZf8bf5WwIzIAkiYA3sj6WJtt2g7CD1loBXrzA1qqctd1dgD
+        iHYANbnMnDxiosZHs05yl4w0WRlEqIldnu4AtBDT4js0BX2LkKboPm1YUzi7DqIaAD+n8wKEfhaTL9hs
+        FQAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="Janik_Baumgartner_Woocons_Dashboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Dashboard.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Janik_Baumgartner_Woocons_Button_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Button-Play.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="redo_icon_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\02-redo-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="clock_icon_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\11-clock-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="wrench_2_icon_158" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\158-wrench-2-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GraphBaground_200x200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\graphbaground_200x200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GraphBaground_50x200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\graphbaground_50x200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PictureBox3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAG8SURBVFhH7VexSgNBEM2niRyI2KQQwcIuiI0kRVoRGxERxEKwsgk2FiKIhSAWNiJ2NiJiI0Gw
+        EixEENH3YFce497t3SWXFN7BcHt7u2/evJnZSxqN+qoVgAJJknTGYb/iO+cTuI/SOv+KwCTUvYVtwTim
+        0pUoMAPgZiCVG5j7dkYilRBoAfgZdi1R0hEjfhICe1UQ2ATohzjZFxXWZP4N4+lhEpgC2Kk48DJ/Ya7r
+        HD2mEBu4BuYA/GCcf8rzK8Y78vyOMWvEt3ouApRrMVBUBLkwzvk8D3sJKEJlDgxOlADlZcX2JW+e/QLm
+        KLOXfFfAlzBWJbiG0dvuyCRA5zfi4NCw17xfBRTaNirY/ZltiL0JQX10vDNaRsaNzL1G6OftMX7mMLh2
+        NkAyqAB79jIlh6xmXkfyniqlfT+oIvccp6wJEjg3zk9c/rwaBNN+b2cQIDHWChULkQwSWBcCPm8sME2H
+        PVLLfkFTi5CnGmX2wEzLfYBENxJ9jFi0DRWgBWdaeHcDOi/1MeqJCivjIMAO6LvKjsmb532hFHjAZRBY
+        HUL0pVKQJ6oia0opUMRBbO0fAiP/aV7/J6oVoAI/G1dkU8jaxMMAAAAASUVORK5CYII=
+</value>
   </data>
 </root>

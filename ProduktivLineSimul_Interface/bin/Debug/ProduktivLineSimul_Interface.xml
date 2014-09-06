@@ -6,7 +6,86 @@ ProduktivLineSimul_Interface
 </name>
 </assembly>
 <members>
-<member name="P:ProduktivLineSimul_Interface.My.Resources.Resources.ResourceManager">
+<member name="F:ProduktivLineSimul_Interface.ChartDisplay.relatedMachine">
+	<summary>
+ Machine for whith the action applies
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.ChartDisplay.#ctor(ProduktivLineSimul.MainModule.clsModular@)">
+	<summary>
+ Create the user command control and show it
+ </summary>
+	<param name="_machine"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.ChartDisplay.ChartDisplay_Load(System.Object,System.EventArgs)">
+	<summary>
+ Displaying form at cursor position
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.ChartDisplay.UpdateValues">
+	<summary>
+ Update displayed values
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.ChartDisplay.Timer1_Tick(System.Object,System.EventArgs)">
+	<summary>
+ Refresh displayed values every second
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="F:ProduktivLineSimul_Interface.MachineParameters.relatedMachine">
+	<summary>
+ Machine for whith the action applies
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.#ctor(ProduktivLineSimul.MainModule.clsModular@)">
+	<summary>
+ Create the user command control and show it
+ </summary>
+	<param name="_machine"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.LoadValues">
+	<summary>
+ Load equipments configuration
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.UpdateLabels">
+	<summary>
+ Update displayed values
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.RefreshLabels(System.Object,System.EventArgs)">
+	<summary>
+ Refresh displayed values
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.Button1_Click(System.Object,System.EventArgs)">
+	<summary>
+ Reset user modifications
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.Button2_Click(System.Object,System.EventArgs)">
+	<summary>
+ Close user control
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MachineParameters.Button3_Click(System.Object,System.EventArgs)">
+	<summary>
+ Apply user configuration on the equipment
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="P:ProduktivLineSimul_Interface.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -19,6 +98,57 @@ ProduktivLineSimul_Interface
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
+</member><member name="F:ProduktivLineSimul_Interface.UserControls.relatedMachine">
+	<summary>
+ Machine for whith the action applies
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ProduktivLineSimul_Interface.UserControls.quitOnFocus">
+	<summary>
+ Quit user control if loosing focus
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.#ctor(ProduktivLineSimul.MainModule.clsModular@)">
+	<summary>
+ Create the user command control and show it
+ </summary>
+	<param name="_machine"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.UserControls_Load(System.Object,System.EventArgs)">
+	<summary>
+ Loading user command control
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.PictureBox1_Click(System.Object,System.EventArgs)">
+	<summary>
+ Start or Stop selected Machine
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.PictureBox2_Click(System.Object,System.EventArgs)">
+	<summary>
+ Open the configuration control for the machine
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.PictureBox3_Click(System.Object,System.EventArgs)">
+	<summary>
+ Open the statistics control for the machine
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.UserControls.UserControls_Deactivate(System.Object,System.EventArgs)">
+	<summary>
+ Close controle when leaving focus
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
 </member><member name="M:ProduktivLineSimul_Interface.MainForm.MainForm_Load(System.Object,System.EventArgs)">
 	<summary>
  Initialize variables and modules for simulation tool
@@ -76,48 +206,6 @@ ProduktivLineSimul_Interface
 	<param name="_criticalMachine"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox1_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_Blower
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox4_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_Filler
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox8_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_Labeller
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox12_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_Packer
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox14_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_Pal
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox16_Click(System.Object,System.EventArgs)">
-	<summary>
- User interraction, stop on PET_PalWrapper
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
 </member><member name="M:ProduktivLineSimul_Interface.MainForm.ToolStripButton1_Click(System.Object,System.EventArgs)">
 	<summary>
  Launch a 8-hours simulation
@@ -128,6 +216,13 @@ ProduktivLineSimul_Interface
 </member><member name="M:ProduktivLineSimul_Interface.MainForm.ToolStripButton3_Click(System.Object,System.EventArgs)">
 	<summary>
  Pause simulation
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul_Interface.MainForm.PictureBox1_Click(System.Object,System.EventArgs)">
+	<summary>
+ PET Blower user control menu
  </summary>
 	<param name="sender"></param>
 	<param name="e"></param>

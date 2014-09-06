@@ -194,13 +194,13 @@
     Private Function getRessourceForMachineState(ByRef _machine As ProduktivLineSimul.clsModular) As Image
         Select Case _machine.lastState
             Case ProduktivLineSimul.clsModular.enumStates.Running
-                Return My.Resources._02_redo_icon
+                Return My.Resources.redo_icon_2
 
             Case ProduktivLineSimul.clsModular.enumStates.Stopped
-                Return My.Resources._158_wrench_2_icon
+                Return My.Resources.wrench_2_icon_158
 
             Case Else 'Undefined or Waiting
-                Return My.Resources._11_clock_icon
+                Return My.Resources.clock_icon_11
         End Select
     End Function
 
@@ -219,66 +219,6 @@
             vbCrLf & "Total rejects: " & _machine.getFormulaResult(ProduktivLineSimul.clsModular.enumFormulas.Counter_Rejected) & _
             IIf(_criticalMachine, vbCrLf & "Line OEE: " & _machine.getFormulaResult(ProduktivLineSimul.clsModular.enumFormulas.OEE), "")
     End Function
-
-    ''' <summary>
-    ''' User interraction, stop on PET_Blower
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
-        PET_Blower.stopRequest()
-    End Sub
-
-    ''' <summary>
-    ''' User interraction, stop on PET_Filler
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox4.Click
-        PET_Filler.stopRequest()
-    End Sub
-
-    ''' <summary>
-    ''' User interraction, stop on PET_Labeller
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox8.Click
-        PET_Labeller.stopRequest()
-    End Sub
-
-    ''' <summary>
-    ''' User interraction, stop on PET_Packer
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox12.Click
-        PET_Packer.stopRequest()
-    End Sub
-
-    ''' <summary>
-    ''' User interraction, stop on PET_Pal
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox14.Click
-        PET_Pal.stopRequest()
-    End Sub
-
-    ''' <summary>
-    ''' User interraction, stop on PET_PalWrapper
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub PictureBox16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox16.Click
-        PET_PalWrapper.stopRequest()
-    End Sub
 
     ''' <summary>
     ''' Launch a 8-hours simulation
@@ -307,4 +247,42 @@
         Timer1.Stop()
     End Sub
 
+
+    ''' <summary>
+    ''' PET Blower user control menu
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
+        Dim myControl As New UserControls(PET_Blower)
+    End Sub
+
+    Private Sub PictureBox4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox4.Click
+        Dim myControl As New UserControls(PET_Filler)
+    End Sub
+
+    Private Sub PictureBox6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox6.Click
+        Dim myControl As New UserControls(PET_Accu1)
+    End Sub
+
+    Private Sub PictureBox8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox8.Click
+        Dim myControl As New UserControls(PET_Labeller)
+    End Sub
+
+    Private Sub PictureBox10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox10.Click
+        Dim myControl As New UserControls(PET_Accu2)
+    End Sub
+
+    Private Sub PictureBox12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox12.Click
+        Dim myControl As New UserControls(PET_Packer)
+    End Sub
+
+    Private Sub PictureBox14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox14.Click
+        Dim myControl As New UserControls(PET_Pal)
+    End Sub
+
+    Private Sub PictureBox16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox16.Click
+        Dim myControl As New UserControls(PET_PalWrapper)
+    End Sub
 End Class

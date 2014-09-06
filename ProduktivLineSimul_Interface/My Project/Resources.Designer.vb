@@ -60,51 +60,65 @@ Namespace My.Resources
             End Set
         End Property
         
-        Friend ReadOnly Property _02_redo_icon() As System.Drawing.Bitmap
+        Friend ReadOnly Property clock_icon_11() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("02-redo-icon", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("clock_icon_11", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Friend ReadOnly Property _11_clock_icon() As System.Drawing.Bitmap
+        Friend ReadOnly Property GraphBaground_200x200() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("11-clock-icon", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("GraphBaground_200x200", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Friend ReadOnly Property _158_wrench_2_icon() As System.Drawing.Bitmap
+        Friend ReadOnly Property GraphBaground_50x200() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("158-wrench-2-icon", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("GraphBaground_50x200", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
         Friend ReadOnly Property Janik_Baumgartner_Woocons_Button_Pause() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Janik-Baumgartner-Woocons-Button-Pause", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Janik_Baumgartner_Woocons_Button_Pause", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
         Friend ReadOnly Property Janik_Baumgartner_Woocons_Button_Play() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Janik-Baumgartner-Woocons-Button-Play", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Janik_Baumgartner_Woocons_Button_Play", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
         Friend ReadOnly Property Janik_Baumgartner_Woocons_Dashboard() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Janik-Baumgartner-Woocons-Dashboard", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Janik_Baumgartner_Woocons_Dashboard", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
         Friend ReadOnly Property Omercetin_Pixelophilia_Recycle() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Omercetin-Pixelophilia-Recycle", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Omercetin_Pixelophilia_Recycle", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property redo_icon_2() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("redo_icon_2", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property wrench_2_icon_158() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("wrench_2_icon_158", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

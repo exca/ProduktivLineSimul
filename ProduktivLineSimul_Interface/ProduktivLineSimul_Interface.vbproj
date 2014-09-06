@@ -66,10 +66,22 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChartDisplay.Designer.vb">
+      <DependentUpon>ChartDisplay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ChartDisplay.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FastSimulDialog.Designer.vb">
       <DependentUpon>FastSimulDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="FastSimulDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MachineParameters.Designer.vb">
+      <DependentUpon>MachineParameters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MachineParameters.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.vb">
@@ -94,10 +106,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UserControls.Designer.vb">
+      <DependentUpon>UserControls.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ChartDisplay.resx">
+      <DependentUpon>ChartDisplay.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FastSimulDialog.resx">
       <DependentUpon>FastSimulDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MachineParameters.resx">
+      <DependentUpon>MachineParameters.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -108,6 +134,10 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls.resx">
+      <DependentUpon>UserControls.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -130,6 +160,8 @@
     <None Include="images\02-redo-icon.png" />
     <None Include="images\11-clock-icon.png" />
     <None Include="images\158-wrench-2-icon.png" />
+    <EmbeddedResource Include="images\GraphBaground_200x200.png" />
+    <EmbeddedResource Include="images\GraphBaground_50x200.png" />
     <Content Include="logo.ico" />
   </ItemGroup>
   <ItemGroup>

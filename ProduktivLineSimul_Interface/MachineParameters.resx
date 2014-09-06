@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,32 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Janik_Baumgartner_Woocons_Button_Pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Button-Pause.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Omercetin_Pixelophilia_Recycle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Omercetin-Pixelophilia-Recycle.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Janik_Baumgartner_Woocons_Dashboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Dashboard.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Janik_Baumgartner_Woocons_Button_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\icons\Janik-Baumgartner-Woocons-Button-Play.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="redo_icon_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\02-redo-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="clock_icon_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\11-clock-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="wrench_2_icon_158" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\158-wrench-2-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GraphBaground_200x200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\graphbaground_200x200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GraphBaground_50x200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\images\graphbaground_50x200.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

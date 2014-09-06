@@ -128,7 +128,7 @@ ProduktivLineSimul
  List of all the formulas availables
  </summary>
 	<remarks></remarks>
-</member><member name="M:ProduktivLineSimul.MainModule.clsModular.getFormulaResult(ProduktivLineSimul.MainModule.clsModular.enumFormulas)">
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.getFormulaResult(ProduktivLineSimul.MainModule.clsModular.enumFormulas,System.Boolean)">
 	<summary>
  Return selected formula's result
  </summary>
@@ -148,6 +148,27 @@ ProduktivLineSimul
 	<param name="_bufferOnly"></param>
 	<param name="_counterOnly"></param>
 	<param name="_advancedResults"></param>
+	<remarks></remarks>
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.EquipmentName">
+	<summary>
+ Get Equipment name
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.IsMachine">
+	<summary>
+ Return the machine type
+ </summary>
+	<value></value>
+	<returns>True if the equipment is a Machine</returns>
+	<remarks></remarks>
+</member><member name="P:ProduktivLineSimul.MainModule.clsModular.IsConveyor">
+	<summary>
+ Return the machine type
+ </summary>
+	<value></value>
+	<returns>True if the equipment is a Conveyor</returns>
 	<remarks></remarks>
 </member><member name="P:ProduktivLineSimul.MainModule.clsModular.Content_entering">
 	<summary>

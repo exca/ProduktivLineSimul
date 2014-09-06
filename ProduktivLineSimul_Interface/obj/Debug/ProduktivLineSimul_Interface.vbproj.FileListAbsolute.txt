@@ -12,3 +12,6 @@ C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\D
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.xml
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.pdb
 C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.FastSimulDialog.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.UserControls.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.MachineParameters.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Debug\ProduktivLineSimul_Interface.ChartDisplay.resources

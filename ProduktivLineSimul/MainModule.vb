@@ -672,7 +672,7 @@
 
         Friend name As String
         Friend modType As enumModularType
-        Friend speed As Decimal = 0
+        Public speed As Decimal = 0
         Public unitCycle As Decimal = 0
         Public lastState As enumStates = enumStates.Undefined
         Friend currentSpeed As Decimal = 0
@@ -685,8 +685,8 @@
         Public rejectrate As Decimal = 0
         Public injectrate As Decimal = 0
 
-        Friend MTTR As Decimal = 0
-        Friend MTBF As Decimal = Decimal.MaxValue
+        Public MTTR As Decimal = 0
+        Public MTBF As Decimal = Decimal.MaxValue
 
         Friend MTTR_next As Decimal = 0
         Friend MTBF_next As Decimal = Decimal.MaxValue
@@ -695,6 +695,7 @@
         Friend Outputs As New List(Of clsLink)
 
         Private Content_Accu As New clsAccu(0, 1, Me)
+        Private Content_Accu_set As Decimal = 0
 
         Friend statsState As New Dictionary(Of enumStates, Decimal)
         Friend statsCounts As New Dictionary(Of enumType, Decimal)
@@ -1304,15 +1305,29 @@
             Counter_Rejected
             TotalTime
             Time_Running
+            Time_Running_secs
+            Time_Running_percent
             Time_Stopped
+            Time_Stopped_secs
+            Time_Stopped_percent
             Time_WaitingUpstream
+            Time_WaitingUpstream_secs
+            Time_WaitingUpstream_percent
             Time_WaitingDownstream
+            Time_WaitingDownstream_secs
+            Time_WaitingDownstream_percent
             OEE
+            OEE_value
             OEE_Quality
+            OEE_Quality_value
             OEE_Efficiency
+            OEE_Efficiency_value
             OEE_OperationalAvailability
+            OEE_OperationalAvailability_value
             Performance
+            Performance_value
             Reliability
+            Reliability_value
         End Enum
 
         ''' <summary>
@@ -1321,11 +1336,15 @@
         ''' <param name="_formula">Formula to be calculated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function getFormulaResult(ByVal _formula As enumFormulas) As String
+        Public Function getFormulaResult(ByVal _formula As enumFormulas, Optional ByVal _forDisplay As Boolean = True)
             If statsFormulas.ContainsKey(_formula) Then
                 Return statsFormulas(_formula)
             Else
-                Return "N/A"
+                If _forDisplay Then
+                    Return "N/A"
+                Else
+                    Return 0
+                End If
             End If
         End Function
 
@@ -1352,11 +1371,11 @@
             For Each oneCounter As enumType In statsCounts.Keys
                 Select Case oneCounter
                     Case enumType.Processed
-                        statsFormulas.Add(enumFormulas.Counter_Processed, displayDecimal(statsCounts(oneCounter)))
+                        statsFormulas.Add(enumFormulas.Counter_Processed, displayDecimal(statsCounts(oneCounter), 0))
                     Case enumType.Inject
-                        statsFormulas.Add(enumFormulas.Counter_Injected, displayDecimal(statsCounts(oneCounter)))
+                        statsFormulas.Add(enumFormulas.Counter_Injected, displayDecimal(statsCounts(oneCounter), 0))
                     Case enumType.Reject
-                        statsFormulas.Add(enumFormulas.Counter_Rejected, displayDecimal(statsCounts(oneCounter)))
+                        statsFormulas.Add(enumFormulas.Counter_Rejected, displayDecimal(statsCounts(oneCounter), 0))
                 End Select
             Next
 
@@ -1368,13 +1387,21 @@
             For Each oneState As enumStates In statsState.Keys
                 Select Case oneState
                     Case enumStates.Running
-                        statsFormulas.Add(enumFormulas.Time_Running, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_Running_percent, displayDecimal(100 * statsState(oneState) / totalTime))
+                        statsFormulas.Add(enumFormulas.Time_Running, toTimeDuration(statsState(oneState)) & " [" & statsFormulas(enumFormulas.Time_Running_percent) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_Running_secs, statsState(oneState))
                     Case enumStates.Stopped
-                        statsFormulas.Add(enumFormulas.Time_Stopped, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_Stopped_percent, displayDecimal(100 * statsState(oneState) / totalTime))
+                        statsFormulas.Add(enumFormulas.Time_Stopped, toTimeDuration(statsState(oneState)) & " [" & statsFormulas(enumFormulas.Time_Stopped_percent) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_Stopped_secs, statsState(oneState))
                     Case enumStates.WaitingInput
-                        statsFormulas.Add(enumFormulas.Time_WaitingUpstream, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_WaitingUpstream_percent, displayDecimal(100 * statsState(oneState) / totalTime))
+                        statsFormulas.Add(enumFormulas.Time_WaitingUpstream, toTimeDuration(statsState(oneState)) & " [" & statsFormulas(enumFormulas.Time_WaitingUpstream_percent) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_WaitingUpstream_secs, statsState(oneState))
                     Case enumStates.WaitingOutput
-                        statsFormulas.Add(enumFormulas.Time_WaitingDownstream, toTimeDuration(statsState(oneState)) & " [" & displayDecimal(100 * statsState(oneState) / totalTime) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_WaitingDownstream_percent, displayDecimal(100 * statsState(oneState) / totalTime))
+                        statsFormulas.Add(enumFormulas.Time_WaitingDownstream, toTimeDuration(statsState(oneState)) & " [" & statsFormulas(enumFormulas.Time_WaitingDownstream_percent) & " %]")
+                        statsFormulas.Add(enumFormulas.Time_WaitingDownstream_secs, statsState(oneState))
                 End Select
             Next
 
@@ -1384,18 +1411,41 @@
             If statsCounts.ContainsKey(enumType.Processed) And speed < MAX_SPEED Then
                 Dim goodProd As Decimal = statsCounts(enumType.Processed)
                 If statsCounts.ContainsKey(enumType.Reject) Then goodProd -= statsCounts(enumType.Reject)
-                If totalTime > 0 And speed > 0 Then statsFormulas.Add(enumFormulas.OEE, displayDecimal(100 * goodProd / (totalTime * speed)) & " %")
-                If statsCounts(enumType.Processed) > 0 Then statsFormulas.Add(enumFormulas.OEE_Quality, displayDecimal(100 * goodProd / statsCounts(enumType.Processed)) & " %")
-                If opAvailab > 0 And speed > 0 Then statsFormulas.Add(enumFormulas.OEE_Efficiency, displayDecimal(100 * statsCounts(enumType.Processed) / (opAvailab * speed)) & " %")
+                If totalTime > 0 And speed > 0 Then
+                    Dim value As Decimal = displayDecimal(100 * goodProd / (totalTime * speed))
+                    statsFormulas.Add(enumFormulas.OEE_value, value)
+                    statsFormulas.Add(enumFormulas.OEE, value & " %")
+                End If
+                If statsCounts(enumType.Processed) > 0 Then
+                    Dim value As Decimal = displayDecimal(100 * goodProd / statsCounts(enumType.Processed))
+                    statsFormulas.Add(enumFormulas.OEE_Quality_value, value)
+                    statsFormulas.Add(enumFormulas.OEE_Quality, value & " %")
+                End If
+                If opAvailab > 0 And speed > 0 Then
+                    Dim value As Decimal = displayDecimal(100 * statsCounts(enumType.Processed) / (opAvailab * speed))
+                    statsFormulas.Add(enumFormulas.OEE_Efficiency_value, value)
+                    statsFormulas.Add(enumFormulas.OEE_Efficiency, value & " %")
+                End If
             End If
-            statsFormulas.Add(enumFormulas.OEE_OperationalAvailability, displayDecimal(100 * opAvailab / totalTime) & " %")
+            If totalTime > 0 Then
+                Dim value As Decimal = displayDecimal(100 * opAvailab / totalTime)
+                statsFormulas.Add(enumFormulas.OEE_OperationalAvailability_value, value)
+                statsFormulas.Add(enumFormulas.OEE_OperationalAvailability, value & " %")
+            End If
+            
             If statsState.ContainsKey(enumStates.Running) Then
                 If statsCounts.ContainsKey(enumType.Processed) And speed < MAX_SPEED Then
                     If statsCounts(enumType.Processed) > 0 And speed > 0 Then
-                        statsFormulas.Add(enumFormulas.Performance, displayDecimal(100 * statsCounts(enumType.Processed) / (statsState(enumStates.Running) * speed)) & " %")
+                        Dim value As Decimal = displayDecimal(100 * statsCounts(enumType.Processed) / (statsState(enumStates.Running) * speed))
+                        statsFormulas.Add(enumFormulas.Performance_value, value)
+                        statsFormulas.Add(enumFormulas.Performance, value & " %")
                     End If
                 End If
-                If opAvailab > 0 Then statsFormulas.Add(enumFormulas.Reliability, displayDecimal(100 * statsState(enumStates.Running) / opAvailab) & " %")
+                If opAvailab > 0 Then
+                    Dim value As Decimal = displayDecimal(100 * statsState(enumStates.Running) / opAvailab)
+                    statsFormulas.Add(enumFormulas.Reliability_value, value)
+                    statsFormulas.Add(enumFormulas.Reliability, value & " %")
+                End If
             End If
 
         End Sub
@@ -1533,6 +1583,43 @@
         End Sub
 
         ''' <summary>
+        ''' Get Equipment name
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public ReadOnly Property EquipmentName() As String
+            Get
+                Return Me.name
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Return the machine type
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns>True if the equipment is a Machine</returns>
+        ''' <remarks></remarks>
+        Public ReadOnly Property IsMachine() As Boolean
+            Get
+                Return (Me.modType = enumModularType.Machine)
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Return the machine type
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns>True if the equipment is a Conveyor</returns>
+        ''' <remarks></remarks>
+        Public ReadOnly Property IsConveyor() As Boolean
+            Get
+                Return (Me.modType = enumModularType.Transport)
+            End Get
+        End Property
+
+
+        ''' <summary>
         ''' Get or Change number of entering products
         ''' </summary>
         ''' <value>Numer of products to put inside</value>
@@ -1582,8 +1669,15 @@
         ''' <param name="_speed">Transit speed in products per second (to define minimum quantity for transit)</param>
         ''' <remarks></remarks>
         Public Sub SetAccumulator(ByVal _accumulated_content As Decimal, ByVal _transit_time As Integer, ByVal _speed As Decimal)
+            Content_Accu_set = _accumulated_content
             Content_Accu = New clsAccu(_accumulated_content + _transit_time * _speed, _transit_time, Me)
         End Sub
+
+        Public ReadOnly Property TotalAccumulation() As Decimal
+            Get
+                Return Content_Accu_set
+            End Get
+        End Property
 
         Friend ReadOnly Property OutputPotential() As Decimal
             Get
