@@ -1,0 +1,9 @@
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\bin\Release\ProduktivLineSimul.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\bin\Release\ProduktivLineSimul.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\bin\Release\ProduktivLineSimul.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ResolveAssemblyReference.cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ProduktivLineSimul.Resources.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ProduktivLineSimul.vbproj.GenerateResource.Cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ProduktivLineSimul.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ProduktivLineSimul.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul\obj\Release\ProduktivLineSimul.pdb

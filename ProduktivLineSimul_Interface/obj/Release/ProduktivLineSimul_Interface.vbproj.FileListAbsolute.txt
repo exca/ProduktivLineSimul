@@ -1,0 +1,17 @@
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul_Interface.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul_Interface.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul_Interface.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul.pdb
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\bin\Release\ProduktivLineSimul.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ResolveAssemblyReference.cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.ChartDisplay.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.FastSimulDialog.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.MachineParameters.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.MainForm.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.Resources.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.UserControls.resources
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.vbproj.GenerateResource.Cache
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.exe
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.xml
+C:\Users\EIT\Desktop\ProduktivLineSimul\trunk\ProduktivLineSimul_Interface\obj\Release\ProduktivLineSimul_Interface.pdb
