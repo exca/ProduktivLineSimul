@@ -696,6 +696,8 @@
 
         Private Content_Accu As New clsAccu(0, 1, Me)
         Private Content_Accu_set As Decimal = 0
+        Private Content_Accu_transit_time As Decimal = 0
+        Private Content_Accu_speed As Decimal = 0
 
         Friend statsState As New Dictionary(Of enumStates, Decimal)
         Friend statsCounts As New Dictionary(Of enumType, Decimal)
@@ -710,7 +712,7 @@
         ''' Combining 1+1=2 or Assembling 1+1=1
         ''' </summary>
         ''' <remarks></remarks>
-        Friend InOutputs_Combining As Boolean = True 'Or Assembling inputs/outputs
+        Public InOutputs_Combining As Boolean = True 'Or Assembling inputs/outputs
 
         ''' <summary>
         ''' Avalables machines states
@@ -1670,14 +1672,29 @@
         ''' <remarks></remarks>
         Public Sub SetAccumulator(ByVal _accumulated_content As Decimal, ByVal _transit_time As Integer, ByVal _speed As Decimal)
             Content_Accu_set = _accumulated_content
+            Content_Accu_speed = _speed
+            Content_Accu_transit_time = _transit_time
+
             Content_Accu = New clsAccu(_accumulated_content + _transit_time * _speed, _transit_time, Me)
         End Sub
+
 
         Public ReadOnly Property TotalAccumulation() As Decimal
             Get
                 Return Content_Accu_set
             End Get
         End Property
+        Public ReadOnly Property TotalAccumulation_transitTime() As Decimal
+            Get
+                Return Content_Accu_transit_time
+            End Get
+        End Property
+        Public ReadOnly Property TotalAccumulation_transitSpeed() As Decimal
+            Get
+                Return Content_Accu_speed
+            End Get
+        End Property
+
 
         Friend ReadOnly Property OutputPotential() As Decimal
             Get
