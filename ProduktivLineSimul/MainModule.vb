@@ -417,7 +417,7 @@
 
     End Sub
 
-    Friend Class clsLink
+    Public Class clsLink
 
         Friend potential As Decimal = 0
 
@@ -465,6 +465,19 @@
     ''' <param name="_to"></param>
     ''' <remarks></remarks>
     Public Sub addLink(ByRef _from As clsModular, ByRef _to As clsModular)
+        'Check if the link does not exists
+        For Each oneLink As clsLink In _from.Outputs
+            If oneLink.downstream Is _to Then
+                Return
+            End If
+        Next
+        For Each oneLink As clsLink In _from.Inputs
+            If oneLink.upstream Is _from Then
+                Return
+            End If
+        Next
+
+        'Add the link
         allLinks.Add(New clsLink(_from, _to))
     End Sub
 
@@ -480,6 +493,24 @@
             onemodule.init()
         Next
     End Sub
+
+    ''' <summary>
+    ''' Automatically define routes for simulation and initialize every module routed
+    ''' </summary>
+    ''' <param name="_outputs">Use the outputs specified and not the default one</param>
+    ''' <remarks></remarks>
+    Public Sub DefineRoutesAndInit(ByRef _outputs As List(Of clsModular))
+        allModules = New List(Of clsModular)
+
+        For Each oneOutput As clsModular In _outputs
+            oneOutput.defineRoutes(allModules)
+        Next
+
+        For Each onemodule As clsModular In allModules
+            onemodule.init()
+        Next
+    End Sub
+
 
     ''' <summary>
     ''' Launch simulation for one interval of time
@@ -612,6 +643,20 @@
 
         End Sub
 
+        ''' <summary>
+        ''' Completely reset accumulator content
+        ''' </summary>
+        ''' <remarks></remarks>
+        Friend Sub Reinit()
+            'Check total content
+            While TotalContent > 0
+                'Reset value
+                Pop(Decimal.MaxValue)
+                'Goto next
+                init()
+            End While
+        End Sub
+
         'Read number of prod that can be delivered next turn
         Public ReadOnly Property OutputPotential() As Decimal
             Get
@@ -691,8 +736,8 @@
         Friend MTTR_next As Decimal = 0
         Friend MTBF_next As Decimal = Decimal.MaxValue
 
-        Friend Inputs As New List(Of clsLink)
-        Friend Outputs As New List(Of clsLink)
+        Public Inputs As New List(Of clsLink)
+        Public Outputs As New List(Of clsLink)
 
         Private Content_Accu As New clsAccu(0, 1, Me)
         Private Content_Accu_set As Decimal = 0
@@ -844,24 +889,55 @@
 
         End Sub
 
+        ''' <summary>
+        ''' Initialize equipment for first use
+        ''' </summary>
+        ''' <remarks></remarks>
         Friend Sub init()
 
             If Initialized Then Return
 
+            'Reset MTTR
             If Not MTTR = 0 Then
                 MTTR_next = NormalMTTR(MTTR)
             Else
                 MTTR_next = 0
             End If
 
+            'Reset MTBF
             If Not MTBF = Decimal.MaxValue Then
                 MTBF_next = NormalMTBF(MTBF)
             Else
                 MTBF_next = Decimal.MaxValue
             End If
 
+            'Counter
+            statsState = New Dictionary(Of enumStates, Decimal)
+            statsCounts = New Dictionary(Of enumType, Decimal)
+            statsFormulas = New Dictionary(Of enumFormulas, String)
+
+            'Potentials
+            acumulatedPotential = 0
+            alreadyPlannedPotential = 0
+            rejectedPotential = 0
+            injectedPotential = 0
+
+            'Accumulation
+            Content_Accu.Reinit()
+            If modType = enumModularType.Input Then
+                Content_Accu.Put(Decimal.MaxValue)
+            End If
+
             Initialized = True
 
+        End Sub
+
+        ''' <summary>
+        ''' Completely reset equipment for new simulation
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub Reinit()
+            Initialized = False
         End Sub
 
         Friend Sub defineRoutes(ByRef _modules As List(Of clsModular))
@@ -1434,7 +1510,7 @@
                 statsFormulas.Add(enumFormulas.OEE_OperationalAvailability_value, value)
                 statsFormulas.Add(enumFormulas.OEE_OperationalAvailability, value & " %")
             End If
-            
+
             If statsState.ContainsKey(enumStates.Running) Then
                 If statsCounts.ContainsKey(enumType.Processed) And speed < MAX_SPEED Then
                     If statsCounts(enumType.Processed) > 0 And speed > 0 Then

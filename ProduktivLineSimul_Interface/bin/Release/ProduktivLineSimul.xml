@@ -34,6 +34,12 @@ ProduktivLineSimul
  Automatically define routes for simulation and initialize every module routed
  </summary>
 	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.DefineRoutesAndInit(System.Collections.Generic.List{ProduktivLineSimul.MainModule.clsModular}@)">
+	<summary>
+ Automatically define routes for simulation and initialize every module routed
+ </summary>
+	<param name="_outputs">Use the outputs specified and not the default one</param>
+	<remarks></remarks>
 </member><member name="M:ProduktivLineSimul.MainModule.Simulate_oneStep(System.Boolean)">
 	<summary>
  Launch simulation for one interval of time
@@ -57,6 +63,11 @@ ProduktivLineSimul
  </summary>
 	<value></value>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsAccu.Reinit">
+	<summary>
+ Completely reset accumulator content
+ </summary>
 	<remarks></remarks>
 </member><member name="F:ProduktivLineSimul.MainModule.clsModular.InOutputs_Combining">
 	<summary>
@@ -102,6 +113,16 @@ ProduktivLineSimul
 	<param name="_params">Parameters definition</param>
 	<param name="_MTTR_or_Eff">According to parameters definition</param>
 	<param name="_MTBF_or_MTTR">According to parameters definition</param>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.init">
+	<summary>
+ Initialize equipment for first use
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ProduktivLineSimul.MainModule.clsModular.Reinit">
+	<summary>
+ Completely reset equipment for new simulation
+ </summary>
 	<remarks></remarks>
 </member><member name="M:ProduktivLineSimul.MainModule.clsModular.checkPotential_pass1">
 	<summary>
