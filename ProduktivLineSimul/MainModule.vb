@@ -112,10 +112,9 @@
         'Project_Waters5L()
         'Project_Oil1L()
         'Project_PerfectLine()
-        'Project_TestReturn()
-        Project_Cosmetic200mL()
-
-        'modInput.Content = 30000
+        Project_TestReturn()
+        'Project_Cosmetic200mL()
+        'Project_AssemblingModeDebug()
 
         modOutput.defineRoutes(allModules)
 
@@ -140,11 +139,11 @@
                 onemodule.run()
             Next
 
-            'Console.Clear()
-            'For Each onemodule As clsModular In displayedModules
-            '    onemodule.details(True)
-            'Next
-            'System.Threading.Thread.Sleep(1000)
+            Console.Clear()
+            For Each onemodule As clsModular In displayedModules
+                onemodule.details(True)
+            Next
+            System.Threading.Thread.Sleep(1000)
 
             Math.DivRem(i, 3600, i_rem)
             If i_rem = 0 Then
@@ -159,6 +158,27 @@
         For Each onemodule As clsModular In displayedModules
             onemodule.details(False, False, False, True)
         Next
+
+    End Sub
+
+    Public Sub Project_AssemblingModeDebug()
+
+        Dim modBlower As New clsModular("Blower", 60000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.9866, 53)
+        modBlower.InOutputs_Combining = False
+
+        modCriticalMachine = modBlower
+
+        Dim modPal As New clsModular("Paletizer", 60000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.9168, 68)
+        modPal.unitCycle = 320
+        modBlower.InOutputs_Combining = False
+
+        allLinks.Add(New clsLink(modInput, modBlower))
+        allLinks.Add(New clsLink(modBlower, modPal))
+        allLinks.Add(New clsLink(modPal, modOutput))
+
+        displayedModules.Add(modBlower)
+        displayedModules.Add(modPal)
+        displayedModules.Add(modOutput)
 
     End Sub
 
@@ -377,6 +397,7 @@
     Public Sub Project_TestReturn()
 
         modInput.speed = 100
+        modInput.Content_Accu_preset_value = 4000
 
         Dim modGrp As New clsModular("Grouper", 300, clsModular.enumSpeedUnit.per_Sec)
         modGrp.InOutputs_Combining = False
@@ -391,7 +412,7 @@
 
         Dim modRetTrp As New clsModular(clsModular.enumModularType.Transport)
         modRetTrp.SetAccumulator(2000, 10, 200)
-        modRetTrp.Content_entering = 4000
+        modRetTrp.Content_Accu_preset_value = 4000
 
         Dim modRetMach As New clsModular("Return Machine", 150, clsModular.enumSpeedUnit.per_Sec, clsModular.enumParameters.Eff_MTBF, 0.8, 30)
 
@@ -651,7 +672,7 @@
             'Check total content
             While TotalContent > 0
                 'Reset value
-                Pop(Decimal.MaxValue)
+                Pop(OutputPotential)
                 'Goto next
                 init()
             End While
@@ -743,6 +764,7 @@
         Private Content_Accu_set As Decimal = 0
         Private Content_Accu_transit_time As Decimal = 0
         Private Content_Accu_speed As Decimal = 0
+        Public Content_Accu_preset_value As Decimal = 0
 
         Friend statsState As New Dictionary(Of enumStates, Decimal)
         Friend statsCounts As New Dictionary(Of enumType, Decimal)
@@ -795,7 +817,7 @@
             Select Case _type
                 Case enumModularType.Input
                     name = "Input"
-                    Content_Accu.Put(Decimal.MaxValue)
+                    Content_Accu_preset_value = Decimal.MaxValue
                 Case enumModularType.Output
                     name = "Output"
                 Case enumModularType.Transport
@@ -924,9 +946,9 @@
 
             'Accumulation
             Content_Accu.Reinit()
-            If modType = enumModularType.Input Then
-                Content_Accu.Put(Decimal.MaxValue)
-            End If
+
+            'Set entering value for accumulation closed circuit or Input source value
+            Content_Accu.Put(Content_Accu_preset_value)
 
             Initialized = True
 
@@ -960,7 +982,7 @@
 
             'Manage time before breackdown and breackdown duration
             If MTBF < MAX_TMBF And Not MTTR = 0 Then
-                If MTTR_next < 1 And MTBF_next < 1 Then
+                If MTTR_next < TIMEBASE And MTBF_next < TIMEBASE Then
                     'Renew MTBF and MTTR
                     MTTR_next = NormalMTTR(MTTR)
                     MTBF_next = NormalMTBF(MTBF)
@@ -977,6 +999,7 @@
                 End While
                 randomizedInputs.Add(Rnd, one_inputlink)
             Next
+
 
             If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
 
@@ -1020,6 +1043,7 @@
                                 capacity = capacity / IIf(.InOutputs_Combining, .Outputs.Count, 1)
                             End With
                         End If
+
                         'Restriction by continuous flow rupture
                         currentpotential = Math.Min(currentpotential, capacity - Me.OutputPotential)
 
@@ -1042,11 +1066,8 @@
                     'We consider the link current potential calculated
                     one_inputlink.potential = currentpotential
 
-                    'We make reservation of the products only if the machine is not assembling them
-                    '(for assembling machine, every output will receive the same amount of products)
-                    If one_inputlink.upstream.InOutputs_Combining Then
-                        one_inputlink.upstream.alreadyPlannedPotential += currentpotential
-                    End If
+                    'We make reservation of the products to allow upstream machine to accept more products at infeed
+                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
 
                 Next
 
@@ -1111,11 +1132,8 @@
                     'We consider the link current potential calculated
                     one_inputlink.potential = currentpotential
 
-                    'We make reservation of the products only if the machine is not assembling them
-                    '(for assembling machine, every output will receive the same amount of products)
-                    If one_inputlink.upstream.InOutputs_Combining Then
-                        one_inputlink.upstream.alreadyPlannedPotential += currentpotential
-                    End If
+                    'We make reservation of the products to allow upstream machine to accept more products at infeed
+                    one_inputlink.upstream.alreadyPlannedPotential += currentpotential
 
                     'Define effective potential according to previously processed links
                     totalcurrentpotential = Math.Min(currentpotential, totalcurrentpotential)
@@ -1171,7 +1189,7 @@
         Friend Sub run()
 
             'If there is no breakdown, the equipment is processing
-            If MTBF_next > 0 Then
+            If Not MTBF_next < TIMEBASE Then
 
                 If Not statsCounts.ContainsKey(enumType.Processed) Then statsCounts.Add(enumType.Processed, 0)
 
@@ -1183,6 +1201,7 @@
                 currentSpeed = 0.0
 
                 Dim upstreamwait As Boolean = True
+                If modType = enumModularType.Input Then upstreamwait = False
 
                 If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
 
