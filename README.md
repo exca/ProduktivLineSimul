@@ -25,7 +25,7 @@ A 8-hours run can be simulated quicker, by clicking on the 8-hours simulation bu
 
 ![Interface buttons](https://raw.githubusercontent.com/exca/ProduktivLineSimul/master/images/Produktiv_buttons.png)
 
-A more detailled usage manual is available at ![ProduktivLineSimul Website](http://produktivlinesimul.free.fr/) (in French). ![.](http://piwik.sychlora.com/piwik.php?idsite=8)
+A more detailled usage manual is available at [ProduktivLineSimul Website](http://produktivlinesimul.free.fr/) (in French).<img src="http://piwik.sychlora.com/piwik.php?idsite=8" style="border:0" alt="" />
 
 ## Contributing
 
