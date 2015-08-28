@@ -992,12 +992,12 @@
             End If
 
             Dim randomizedInputs As New SortedList(Of Single, clsLink)
+            Dim key As Single = Rnd()
             For Each one_inputlink As clsLink In Inputs
-                Dim key As Single = Rnd()
                 While randomizedInputs.ContainsKey(key)
                     key = Rnd()
                 End While
-                randomizedInputs.Add(Rnd, one_inputlink)
+                randomizedInputs.Add(key, one_inputlink)
             Next
 
 
@@ -1168,7 +1168,7 @@
 
                 Dim balancedPotential As Decimal = Decimal.MaxValue
 
-                'Check the potential on eahc output
+                'Check the potential on each output
                 For Each one_outputlink As clsLink In Outputs
                     balancedPotential = Math.Min(balancedPotential, one_outputlink.potential)
                 Next
@@ -1342,6 +1342,7 @@
                 For Each one_outputlink As clsLink In Outputs
                     If Not one_outputlink.state = clsLink.enumStates.Full Then downstreamwait = False
                 Next
+                If downstreamwait Then upstreamwait = False
 
                 'Manage stats timebase
                 If upstreamwait Then
