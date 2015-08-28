@@ -1000,7 +1000,6 @@
                 randomizedInputs.Add(key, one_inputlink)
             Next
 
-
             If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
 
                 For Each one_inputlink As clsLink In randomizedInputs.Values
@@ -1201,6 +1200,7 @@
                 currentSpeed = 0.0
 
                 Dim upstreamwait As Boolean = True
+                Dim downstreamwait As Boolean = False
                 If modType = enumModularType.Input Then upstreamwait = False
 
                 If InOutputs_Combining Then 'Outputs are combined I tot. = I1 + I1 + ...
@@ -1262,6 +1262,13 @@
                         End If
 
                     Next 'next link to be processed
+
+                    'Manage downstream backup for combining
+                    downstreamwait = True
+                    For Each one_outputlink As clsLink In Outputs
+                        If Not one_outputlink.state = clsLink.enumStates.Full Then downstreamwait = False
+                    Next
+                    If downstreamwait Then upstreamwait = False
 
                 Else 'Outputs are assembled/separated, I tot. = min(O1, O2, ...) 
 
@@ -1334,15 +1341,14 @@
                         upstreamwait = False 'All links have products
                     End If
 
+                    'Manage downstream backup for assembling
+                    downstreamwait = False
+                    For Each one_outputlink As clsLink In Outputs
+                        If one_outputlink.state = clsLink.enumStates.Full Then downstreamwait = True
+                    Next
+                    If downstreamwait Then upstreamwait = False
+
                 End If
-
-
-                'Manage downstream backup
-                Dim downstreamwait As Boolean = True
-                For Each one_outputlink As clsLink In Outputs
-                    If Not one_outputlink.state = clsLink.enumStates.Full Then downstreamwait = False
-                Next
-                If downstreamwait Then upstreamwait = False
 
                 'Manage stats timebase
                 If upstreamwait Then
