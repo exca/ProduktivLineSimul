@@ -112,9 +112,10 @@
         'Project_Waters5L()
         'Project_Oil1L()
         'Project_PerfectLine()
-        Project_TestReturn()
+        'Project_TestReturn()
         'Project_Cosmetic200mL()
         'Project_AssemblingModeDebug()
+        Project_ShortNeck()
 
         modOutput.defineRoutes(allModules)
 
@@ -122,7 +123,7 @@
             onemodule.init()
         Next
 
-        Dim i As Integer = 3600 * 8
+        Dim i As Integer = 3600 * 8 * 2
         Dim i_rem As Integer = 1
         While i > 0
 
@@ -139,15 +140,31 @@
                 onemodule.run()
             Next
 
-            Console.Clear()
-            For Each onemodule As clsModular In displayedModules
-                onemodule.details(True)
-            Next
-            System.Threading.Thread.Sleep(1000)
+            'Console.Clear()
+            'For Each onemodule As clsModular In displayedModules
+            '            onemodule.details(True)
+            'Next
+            'System.Threading.Thread.Sleep(1000)
 
             Math.DivRem(i, 3600, i_rem)
             If i_rem = 0 Then
-                modCriticalMachine.details(False, False, False, True)
+                'modCriticalMachine.details(False, False, False, True)
+
+                ' Console.WriteLine("Press enter to continue...")
+                ' Console.ReadLine()
+                Console.Clear()
+                For Each onemodule As clsModular In displayedModules
+                    onemodule.details(False, False, False, True)
+                Next
+                Console.WriteLine()
+                Try
+                    modOutput.prepareFormulasResults()
+                    Console.WriteLine("Line OEE = " & Val(modOutput.statsFormulas(clsModular.enumFormulas.Counter_Processed)) / Val(modOutput.statsFormulas(clsModular.enumFormulas.Time_WaitingDownstream_secs)) / modCriticalMachine.speed)
+                Catch ex As Exception
+                End Try
+                Console.WriteLine()
+                Console.WriteLine("SIMULATION ENDS IN " & Math.DivRem(i, 3600, i_rem) & " HOURS")
+
             End If
 
             i -= 1
@@ -158,6 +175,14 @@
         For Each onemodule As clsModular In displayedModules
             onemodule.details(False, False, False, True)
         Next
+
+        Try
+            modOutput.prepareFormulasResults()
+            Console.WriteLine("Line OEE = " & Val(modOutput.statsFormulas(clsModular.enumFormulas.Counter_Processed)) / Val(modOutput.statsFormulas(clsModular.enumFormulas.Time_WaitingDownstream_secs)) / modCriticalMachine.speed)
+        Catch ex As Exception
+        End Try
+
+        Console.WriteLine("- SIMULATION END - Press enter to continue...")
 
     End Sub
 
@@ -390,6 +415,117 @@
         displayedModules.Add(modLabeler)
         displayedModules.Add(modWrapper)
         displayedModules.Add(modPal)
+        displayedModules.Add(modOutput)
+
+    End Sub
+
+    Public Sub Project_ShortNeck()
+
+        Dim prodPerSec As Decimal = 50200 / 3600
+
+        Dim modDepal As New clsModular("Depaletizer", 78300, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 71, 154)
+        modDepal.unitCycle = 100
+        allLinks.Add(New clsLink(modInput, modDepal))
+        displayedModules.Add(modDepal)
+
+        Dim modTrp1 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp1.SetAccumulator(233 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modDepal, modTrp1))
+
+        'Dim modInliner1 As New clsModular("Inliner_Filler", 51000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 67, 562)
+        Dim modInliner1 As New clsModular("Inliner_Filler", 51000, clsModular.enumSpeedUnit.per_Hour)
+        allLinks.Add(New clsLink(modTrp1, modInliner1))
+
+        'Dim modInspect1 As New clsModular("Inspector_Filler", 51000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 63, 702)
+        Dim modInspect1 As New clsModular("Inspector_Filler", 51000, clsModular.enumSpeedUnit.per_Hour)
+        allLinks.Add(New clsLink(modInliner1, modInspect1))
+
+        'Dim modFiller As New clsModular("Filler", 50200, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 113, 374)
+        Dim modFiller As New clsModular("Filler", 50200, clsModular.enumSpeedUnit.per_Hour)
+        'modFiller.rejectrate = 1 - 0.9978
+        modFiller.rejectrate = 0.001
+        modCriticalMachine = modFiller
+        allLinks.Add(New clsLink(modInspect1, modFiller))
+        displayedModules.Add(modFiller)
+
+        Dim modTrp2 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp2.SetAccumulator(20 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modFiller, modTrp2))
+
+        Dim modPasteu As New clsModular("Pasteurizer", 53600, clsModular.enumSpeedUnit.per_Hour)
+        modPasteu.SetAccumulator(10 * prodPerSec, 3000, modPasteu.speed)
+        allLinks.Add(New clsLink(modTrp2, modPasteu))
+        displayedModules.Add(modPasteu)
+
+        Dim modTrp3 As New clsModular(clsModular.enumModularType.Transport)
+        'modTrp3.SetAccumulator(53 * prodPerSec, 30, prodPerSec)
+        modTrp3.SetAccumulator(113 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modPasteu, modTrp3))
+
+        Dim modInliner2 As New clsModular("Inliner_Labeller1", 27000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 157, 1964)
+        allLinks.Add(New clsLink(modTrp3, modInliner2))
+
+        'Dim modLabel1 As New clsModular("Labeller1", 26000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 120, 1184)
+        Dim modLabel1 As New clsModular("Labeller1", 26000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 18, 4275)
+        'Dim modLabel1 As New clsModular("New Labeller1", 33000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.95, 45)
+        'modLabel1.rejectrate = 1 - 0.9988
+        modFiller.rejectrate = 0.001
+        allLinks.Add(New clsLink(modInliner2, modLabel1))
+        displayedModules.Add(modLabel1)
+
+        Dim modInliner3 As New clsModular("Inliner_Labeller2", 24000, clsModular.enumSpeedUnit.per_Hour)
+        allLinks.Add(New clsLink(modTrp3, modInliner3))
+
+        Dim modLabel2 As New clsModular("Labeller2", 23000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 49, 5400)
+        'modLabel2.rejectrate = 1 - 0.9973
+        modFiller.rejectrate = 0.001
+        allLinks.Add(New clsLink(modInliner3, modLabel2))
+        displayedModules.Add(modLabel2)
+
+        Dim modTrp4 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp4.SetAccumulator(100 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modLabel1, modTrp4))
+        allLinks.Add(New clsLink(modLabel2, modTrp4))
+
+        'Dim modPacker1 As New clsModular("Packer1", 51700, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 74, 5040)
+        Dim modPacker1 As New clsModular("Packer1", 51700, clsModular.enumSpeedUnit.per_Hour)
+        modPacker1.unitCycle = 6
+        allLinks.Add(New clsLink(modTrp4, modPacker1))
+        displayedModules.Add(modPacker1)
+
+        Dim modTrp5 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp5.SetAccumulator(20 * prodPerSec, 15, prodPerSec)
+        'modTrp5.SetAccumulator(60 * prodPerSec, 15, prodPerSec)
+        allLinks.Add(New clsLink(modPacker1, modTrp5))
+
+        'Dim modPacker2 As New clsModular("Packer2", 63500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 56, 480)
+        Dim modPacker2 As New clsModular("Packer2", 63500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 45, 617)
+        modPacker2.unitCycle = 24
+        allLinks.Add(New clsLink(modTrp5, modPacker2))
+        displayedModules.Add(modPacker2)
+
+        Dim modTrp6 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp6.SetAccumulator(31 * prodPerSec, 30, prodPerSec)
+        'modTrp6.SetAccumulator(120 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modPacker2, modTrp6))
+
+        'Dim modPal As New clsModular("Paletizer", 53500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 102, 1657)
+        Dim modPal As New clsModular("Palletizer", 53500, clsModular.enumSpeedUnit.per_Hour)
+        'Dim modPal As New clsModular("New Paletizer", 63000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.95, 60)
+        modPal.unitCycle = 24 * 10
+        allLinks.Add(New clsLink(modTrp6, modPal))
+        displayedModules.Add(modPal)
+
+        Dim modTrp7 As New clsModular(clsModular.enumModularType.Transport)
+        modTrp7.SetAccumulator(312 * prodPerSec, 30, prodPerSec)
+        allLinks.Add(New clsLink(modPal, modTrp7))
+
+        Dim modPalWrapper As New clsModular("Pallet Wrapper", 53500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 102, 1657)
+        modPalWrapper.unitCycle = 24 * 10 * 6
+        allLinks.Add(New clsLink(modTrp7, modPalWrapper))
+        displayedModules.Add(modPalWrapper)
+
+        allLinks.Add(New clsLink(modPalWrapper, modOutput))
         displayedModules.Add(modOutput)
 
     End Sub
