@@ -247,6 +247,15 @@
         Timer1.Stop()
     End Sub
 
+    ''' <summary>
+    ''' Reset the simulation
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
+
+    End Sub
 
     ''' <summary>
     ''' PET Blower user control menu
@@ -285,4 +294,5 @@
     Private Sub PictureBox16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox16.Click
         Dim myControl As New UserControls(PET_PalWrapper)
     End Sub
+
 End Class

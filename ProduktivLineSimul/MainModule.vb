@@ -4,7 +4,7 @@
     Public Const NUMDECIMAL As Integer = 2
     Public Const EPSILON As Decimal = 0.0001
     Public Const MAX_SPEED As Decimal = 10000
-    Public Const MAX_TMBF As Decimal = 3600 * 8
+    Public Const MAX_MTBF As Decimal = 3600 * 8
     Friend LastTRPNum As Integer = 0
 
     Friend Const RealisticDistributions As Boolean = False
@@ -509,7 +509,7 @@
         'modTrp6.SetAccumulator(120 * prodPerSec, 30, prodPerSec)
         allLinks.Add(New clsLink(modPacker2, modTrp6))
 
-        'Dim modPal As New clsModular("Paletizer", 53500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 102, 1657)
+        'Dim modPal As New clsModular("Palletizer", 53500, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.MTTR_MTBF, 102, 1657)
         Dim modPal As New clsModular("Palletizer", 53500, clsModular.enumSpeedUnit.per_Hour)
         'Dim modPal As New clsModular("New Paletizer", 63000, clsModular.enumSpeedUnit.per_Hour, clsModular.enumParameters.Eff_MTTR, 0.95, 60)
         modPal.unitCycle = 24 * 10
@@ -888,7 +888,7 @@
         Public injectrate As Decimal = 0
 
         Public MTTR As Decimal = 0
-        Public MTBF As Decimal = Decimal.MaxValue
+        Public MTBF As Decimal = MAX_MTBF
 
         Friend MTTR_next As Decimal = 0
         Friend MTBF_next As Decimal = Decimal.MaxValue
@@ -1063,10 +1063,10 @@
             End If
 
             'Reset MTBF
-            If Not MTBF = Decimal.MaxValue Then
+            If Not MTBF >= MAX_MTBF And Not MTBF = 0 Then
                 MTBF_next = NormalMTBF(MTBF)
             Else
-                MTBF_next = Decimal.MaxValue
+                MTBF_next = MAX_MTBF
             End If
 
             'Counter
@@ -1117,7 +1117,7 @@
         Friend Sub checkPotential_pass1()
 
             'Manage time before breackdown and breackdown duration
-            If MTBF < MAX_TMBF And Not MTTR = 0 Then
+            If MTBF < MAX_MTBF And Not MTTR = 0 Then
                 If MTTR_next < TIMEBASE And MTBF_next < TIMEBASE Then
                     'Renew MTBF and MTTR
                     MTTR_next = NormalMTTR(MTTR)
@@ -1499,7 +1499,7 @@
                     If Not statsState.ContainsKey(enumStates.Running) Then statsState.Add(enumStates.Running, 0)
                     statsState(enumStates.Running) += TIMEBASE
                     lastState = enumStates.Running
-                    If MTBF < MAX_TMBF And Not MTTR = 0 Then MTBF_next -= TIMEBASE
+                    If MTBF < MAX_MTBF And Not MTTR = 0 Then MTBF_next -= TIMEBASE
                 End If
 
             Else 'Equipment if stopped
@@ -1509,7 +1509,7 @@
 
                 statsState(enumStates.Stopped) += TIMEBASE
                 lastState = enumStates.Stopped
-                If MTBF < MAX_TMBF And Not MTTR = 0 Then MTTR_next -= TIMEBASE
+                If MTBF < MAX_MTBF And Not MTTR = 0 Then MTTR_next -= TIMEBASE
             End If
 
         End Sub
@@ -1519,7 +1519,7 @@
         ''' </summary>
         ''' <remarks>Allowing user interraction</remarks>
         Public Sub stopRequest()
-            If MTBF < MAX_TMBF And Not MTTR = 0 Then
+            If MTBF < MAX_MTBF And Not MTTR = 0 Then
                 If MTBF_next > 1 Then
                     'Force stop
                     MTBF_next = 0
@@ -1716,7 +1716,7 @@
 
             Console.Write(name & " (speed: " & displaySpeed(currentSpeed) & ")")
             If MTBF_next <= 0 Then Console.Write(" [OWN STOP for " & toTimeDuration(MTTR_next) & "]")
-            If MTBF_next > 0 And MTBF_next < MAX_TMBF Then Console.Write(" [RUNNING for " & toTimeDuration(MTBF_next) & "]")
+            If MTBF_next > 0 And MTBF_next < MAX_MTBF Then Console.Write(" [RUNNING for " & toTimeDuration(MTBF_next) & "]")
             Console.WriteLine()
 
             If Content_Max > 0 Then Console.WriteLine(" - content: " & displayDecimal(Content) & " (entering=" & displayDecimal(Content_entering) & ")/" & displayDecimal(Content_Max))
